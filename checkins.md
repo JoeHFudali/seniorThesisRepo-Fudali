@@ -56,26 +56,26 @@
 
 ---
 
-## Week 4 Summary (MM/DD/YYYY)
+## Week 4 Summary (09/22/2025)
 ### This week I worked on:
 
-[Your answer here]
+Deciding the topic for my project and beginning research (watching video's, looking at code playback) for the project
 
 ### This week I learned:
 
-[Your answer here]
+It can be hard to come up with a project idea that is resonable! Specifically regarding my project, the back propogation - especially the Multivariable Calculus idea of reducing the error across all the dimension - is something I had not previously known too well regarding Neural Networks.
 
 ### My successes this week were:
 
-[Your answer here]
+First, I was able to finish the videos and go over the code playback in it's entirety! Additionally, learning more about the subject itself, the back propogation, error formulas, adjusting towards the lowest error are just a few of the things I was able to learn and better understand about the subject, which will help greatly in understanding how I can use this in conjunction with Q-learning. I was also able to fully implement the code playback by writing it out entirely from the playback, which is a nice bonus.
 
 ### The challenges I faced this week were:
 
-[Your answer here]
+The biggest challenges was, first and foremost, coming up with the idea itself. Picking an idea that has enough data to support it (regarding how Machine learning trains), yet keeping the project from being too simple was a delicate balance, one I found a solution to in an interesting way, with the help of Professor Mahoney. Another challenge is just trying to completely and fully understand all the code behind a Neural Network. While I do understand a lot of the material, including the mathematics behind it, a lot of my understanding is conseptual, and writing out a N.N., while not completely neccesary, is something I don't think I am capable of doing yet.
 
 ---
 
-## Week 5 Summary (MM/DD/YYYY)
+## Week 5 Summary (09/27/2025)
 ### This week I worked on:
 
 [Your answer here]
