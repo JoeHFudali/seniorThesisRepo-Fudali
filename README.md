@@ -56,28 +56,13 @@ This program is intended to learn how to play simple games through deep Q-learni
 - Possibly Atari games.
 
 ### Definitions, Acronyms, and Abbreviations
-- **Registrar**: The official responsible for maintaining student records, managing course schedules, and overseeing the registration process.
-- **Student Information System (SIS)**: A university-wide database that stores student records, course information, and academic data.
-- **GPA**: Grade Point Average, a numerical representation of a student's academic performance.
-- **Semester**: A division of the academic year, typically consisting of a Fall and Spring term, in which courses are offered and completed.
-- **Waitlist**: A system that allows students to reserve a spot in a full course, subject to availability if another student drops the course.
-- **Prerequisite**: A course or requirement that must be completed before a student can enroll in a more advanced course.
-- **User Role**: A designation for system access levels, such as student, registrar, or faculty member, each with different permissions within the system.
-- **Concurrent Enrollment**: The ability for students to be enrolled in multiple courses during the same academic term.
+W.I.P.
 
 ## Overview
-The Mahoney University Registration System is a web-based platform designed to automate the course registration process for students and faculty. It serves as the primary interface for students to manage their academic schedules and for university staff to oversee the course offerings and registration workflows.
+Reinforcement learning is a sub-field in Machine Learning that aims to create a program that can learn the most optimal strategies to play simple games. It does this through Q-learning and a Q-table filled with different action/state combinations, with each combination containing a reward value. Over time, we update this value to get to a place where our table finalizes a table with the correct reward values. We can go further than this and combine a Neural Network with Q-learning to have the learning process both become more efficient and take much less time to complete [W.I.P.]
 
 ### System Features:
-1. **Secure Login**: Ensures that only authorized users (students, faculty, and staff) have access to the system, with user authentication based on university credentials.
-2. **Course Search**: Allows students to browse available courses by department, term, and subject, with filtering options based on course availability, schedule, and prerequisites.
-3. **Course Registration**: Students can add or drop courses, view class schedules, and receive notifications of any conflicts or unmet prerequisites.
-4. **Grades and Transcripts**: Provides students with access to their grades from current and past semesters, as well as the ability to request official transcripts.
-5. **Registrar Management Tools**: The Registrar’s Office can create, modify, and delete course sections, set enrollment limits, and manage waitlists.
-
-The system is designed with scalability in mind, allowing it to handle thousands of students registering simultaneously during peak periods. It will integrate with the university’s existing Student Information System (SIS) and is built using modern web technologies to ensure ease of use, reliability, and performance.
-
-The following sections detail the specific use cases that the system will support, describing how students and staff will interact with the system during typical operations.
+[W.I.P.]
 
 ## Use Cases
 
