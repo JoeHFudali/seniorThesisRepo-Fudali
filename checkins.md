@@ -75,26 +75,26 @@ The biggest challenges was, first and foremost, coming up with the idea itself. 
 
 ---
 
-## Week 5 Summary (09/27/2025)
+## Week 5 Summary (09/29/2025)
 ### This week I worked on:
 
-[Your answer here]
+Writing down diagrams of the Neural Network from the Code Playback, and also watching some video's on how Q-learning works.
 
 ### This week I learned:
 
-[Your answer here]
+Q-learning has a lot more aspects to it than I had first thought. 
 
 ### My successes this week were:
 
-[Your answer here]
+Fully implementing a graphical view of the Neural Network, with private variables and functions with their descriptions. I think this has really helped me understand to entire structure of the Neural Network. 
 
 ### The challenges I faced this week were:
 
-[Your answer here]
+Trying to understand Q-learning. While I get some of the aspects of it such as the state/action table, and the reward adjusting, a lot of it does fly over my head. I am hoping to really iron out some of the fuzzier details on it soon.
 
 ---
 
-## Week 6 Summary (MM/DD/YYYY)
+## Week 6 Summary (10/06/2025)
 ### This week I worked on:
 
 [Your answer here]
