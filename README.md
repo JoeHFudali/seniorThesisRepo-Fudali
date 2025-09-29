@@ -66,9 +66,9 @@ Reinforcement learning is a sub-field in Machine Learning that aims to create a 
 
 ## Use Cases
 
-### Use Case 1.1: Base Tic Tac Toe
+### Use Case 1.1: Base Tic Tac Toe with Base Q-learning
 - **Actors**: Human Player and Reinforcement Learning Program.
-- **Overview**: The human player plays games of Tic Tac Toe against a program that acts optimally.
+- **Overview**: The human player plays games of Tic Tac Toe against a program that utilizes a basic Q-learning algorithm.
 
 **Typical Course of Events**:
 1. A random "coin toss" determines who goes first, and that player puts down their first.
@@ -85,9 +85,11 @@ Reinforcement learning is a sub-field in Machine Learning that aims to create a 
 - **Overview**: The human player plays modified games of Tic Tac Toe (in this case, a 5 by 5 board instead of a 3 by 3 board) against a program that acts optimally.
 
 **Typical Course of Events**:
-1. A random "coin toss" determines who goes first, and that player puts down their first.
-2. If the program went first, user continues with it's turn normally. If the player went first, the program will go through a Q-learning table, and use a Neural Network to determine the best course of action to win. (This will be expanded upon for the 5 by 5, mostly for the Neural Network/Q-table size)
-3. The Process repeats until either one player looses or a tie is reached.
+1. If the program went first, user continues with it's turn normally. If the player went first, the program will go through a Q-learning table
+2. The program will take a table of all the states and all the actions, and insert in random rewards for each cell.
+3. The program will then play games, and learn how to adjust the values in the table.
+4. The Process repeats until it is determined that the reward values are adjusted enough.
+5. The program will now be able to play the game with a player, where the player enters in coords for the tic tac toe board.
 
 **Alternative Courses**:
 - **Step 1/2**: User enters coordinates that do not correspong to an existing/open position.
