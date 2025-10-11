@@ -97,23 +97,23 @@ Trying to understand Q-learning. While I get some of the aspects of it such as t
 ## Week 6 Summary (10/06/2025)
 ### This week I worked on:
 
-[Your answer here]
+Setting up my coding environment on VSCode
 
 ### This week I learned:
 
-[Your answer here]
+Nothing too much, I was pretty busy this week with my job and other classes unfortunatly.
 
 ### My successes this week were:
 
-[Your answer here]
+Starting to create the structure of my project in my code.
 
 ### The challenges I faced this week were:
 
-[Your answer here]
+Just trying to find some tme to work on the project/research more on the topic of Q-learning.
 
 ---
 
-## Week 7 Summary (MM/DD/YYYY)
+## Week 7 Summary (10/13/2025)
 ### This week I worked on:
 
 [Your answer here]
