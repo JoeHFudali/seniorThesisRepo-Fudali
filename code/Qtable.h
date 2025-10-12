@@ -9,16 +9,25 @@ public:
 
     Qtable();
 
-    void constructTable();
+    void constructTable(vector<int> actionInputs);
 
 
 
+    vector<int> getStates();
+    vector<int> getActions();
 
+    void setQValue(int state, int action, double value);
+
+    vector<vector<double>> getRewards();
+
+    int getMax(vector<double> actions);
 
 private:
-    vector<string> actions;
-    vector<string> states;
+    vector<int> actions;
+    vector<int> states;
 
     vector<vector<double>> rewards;
+
+    
 
 };

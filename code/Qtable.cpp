@@ -4,7 +4,7 @@
 using namespace std;
 
 Qtable::Qtable() {
-    actions = {"Top Left", "Top Middle", "Top Right", 
+    vector<string> actionLabels = {"Top Left", "Top Middle", "Top Right", 
                "Middle Left", "Middle", "Middle Right",
                "Bottom Left", "Bottom Middle", "Bottom Right"};
 
@@ -18,3 +18,41 @@ Qtable::Qtable() {
         }
     }
 }
+
+void Qtable::constructTable(vector<int> actionInputs) {
+    actions = actionInputs;
+}
+
+vector<int> Qtable::getStates() {
+    return states;
+}
+
+vector<int> Qtable::getActions() {
+    return actions;
+}
+
+
+void Qtable::setQValue(int state, int action, double value) {
+    rewards[state][action] = value;
+}
+
+
+vector<vector<double>> Qtable::getRewards() {
+    return rewards;
+}
+
+int Qtable::getMax(vector<double> actions) {
+    double biggest = actions[0];
+    int retVal = 0;
+
+    for (int i = 0; i < actions.size(); i++) {
+        if (actions[i] > biggest) {
+            biggest = actions[i];
+            retVal = i;
+        }
+    }
+
+
+    return retVal;
+}
+

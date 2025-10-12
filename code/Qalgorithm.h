@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ctime>
 #include "Qtable.h"
 
 using namespace std;
@@ -16,6 +17,7 @@ public:
 
 private:
     Qtable table;
+    int currentState;
     double epsilon;
     double alpha;
     double gamma;
