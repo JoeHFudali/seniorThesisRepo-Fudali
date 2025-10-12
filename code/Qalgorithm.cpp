@@ -11,6 +11,14 @@ Qalgorithm::Qalgorithm(double eps, double alp, double gam) {
 
 }
 
+void Qalgorithm::iterate(int episodes) {
+
+    for(int i = 0; i < episodes; i++) {
+        int randNum = rand() % 2;
+        cout << randNum << endl;
+    }
+}
+
 Qtable Qalgorithm::getQTable() {
     return table;
 }

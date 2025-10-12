@@ -10,6 +10,8 @@ public:
     //We will include a "run" function that takes the Q-table, plays games of TicTacToe,
     //and alters our table's values depending on our episode results
 
+    void iterate(int episodes);
+
     Qtable getQTable();
 
 private:
