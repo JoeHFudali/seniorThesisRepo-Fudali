@@ -116,23 +116,23 @@ Just trying to find some tme to work on the project/research more on the topic o
 ## Week 7 Summary (10/13/2025)
 ### This week I worked on:
 
-[Your answer here]
+Beginning to code my Q-algorithm/Q-table in my project, as well as try to connect the alogrithm to inputs of a TicTacToeBoard, and decide what the outputs for the board/Q-table rewards should look like.
 
 ### This week I learned:
 
-[Your answer here]
+How a Q-algorithm looks in a programming language, and how to include things such as the epsilon greedy policy, how to identify actions/states regarding my Q-table, and how TicTacToe can be related to Q-learning.
 
 ### My successes this week were:
 
-[Your answer here]
+Setting up a majority of my algorithm, as well as better understanding the TicTacToeBoard class I will use for this assignment. I got a lot more work done on my project than I thought I would have by the end of the week, and my assingment for the TicTacToeBoard class gives me a better understanding on how to connect the two aspects of my project together.
 
 ### The challenges I faced this week were:
 
-[Your answer here]
+Understanding how my states should be laid out and deciding how the Agent should be trained. I am not sure what would be acceptable/possible for the state dimension of my Q-table - if I should generate every single board combination, if I should make the marks seperate or just count a space as "taken", and more. As for the training, I believe it would be too inefficient to train against a human, but I also do not know if training against another agent or a program that randomly picks spots is good enough for training.
 
 ---
 
-## Week 8 Summary (MM/DD/YYYY)
+## Week 8 Summary (10/20/2025)
 ### This week I worked on:
 
 [Your answer here]
