@@ -20,7 +20,11 @@ public:
 
     vector<vector<double>> getRewards();
 
+    //Change this to getActionMax
     int getMax(vector<double> actions);
+
+    //int getRow(int action);
+    //int getCol(int action);
 
 private:
     vector<int> actions;

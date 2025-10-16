@@ -55,4 +55,3 @@ int Qtable::getMax(vector<double> actions) {
 
     return retVal;
 }
-

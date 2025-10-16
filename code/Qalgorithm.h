@@ -17,7 +17,6 @@ public:
 
 private:
     Qtable table;
-    int currentState;
     double epsilon;
     double alpha;
     double gamma;
