@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include "Qtable.h"
+#include "TicTacToeBoard.h"
 
 using namespace std;
 

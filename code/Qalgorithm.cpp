@@ -19,8 +19,8 @@ void Qalgorithm::iterate(int episodes) {
 
     for(int i = 0; i < episodes; i++) {
 
-        //string boardString = "---------";
-       //TicTacToeBoard board(boardString);
+        string boardString = "---------";
+        TicTacToeBoard board(boardString);
 
         //We will put the entirety of the below code into a while loop that looks something like this:
         //while(board.getBoardState() == TicTacToeBoard::BOARD_STATE::INCOMPLETE_GAME) {
@@ -56,14 +56,14 @@ void Qalgorithm::iterate(int episodes) {
         //Do something like b1.setSquare() based on what our action is and what is represents (coords in this case)
         //We get new state based on new board string, our reward from the cross state/action done, and check if we are done
 
-        //TicTacToeBoard::PLAYER_TURN turn = b1.getPlayerTurn();
-        //TicTacToeBoard::SQUARE_OCCUPANT mark;
-        //if(turn == TicTacToeBoard::PLAYER_TURN::X_TURN) {
-        // mark = "X";
-        //}
-        //else {
-        // mark = "O";
-        //}
+        TicTacToeBoard::PLAYER_TURN turn = board.getPlayerTurn();
+        TicTacToeBoard::SQUARE_OCCUPANT mark;
+        if(turn == TicTacToeBoard::PLAYER_TURN::X_TURN) {
+         mark = TicTacToeBoard::SQUARE_OCCUPANT::X;
+        }
+        else {
+         mark = TicTacToeBoard::SQUARE_OCCUPANT::O;
+        }
         //int row = table.getRow(action);
         //int col = table.getCol(action); These functions will go to our actions and return what coords they affect
         // 
