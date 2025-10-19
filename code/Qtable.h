@@ -21,10 +21,10 @@ public:
     vector<vector<double>> getRewards();
 
     //Change this to getActionMax
-    int getMax(vector<double> actions);
+    int getActionMax(vector<int> actionsRemaining, int currState);
 
-    //int getRow(int action);
-    //int getCol(int action);
+    int getRow(int action);
+    int getCol(int action);
 
 private:
     vector<int> actions;

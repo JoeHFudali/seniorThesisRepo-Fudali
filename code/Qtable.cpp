@@ -41,17 +41,49 @@ vector<vector<double>> Qtable::getRewards() {
     return rewards;
 }
 
-int Qtable::getMax(vector<double> actions) {
-    double biggest = actions[0];
+int Qtable::getActionMax(vector<int> actionsRemaining, int currState) {
+    double biggest = rewards[currState][0];
     int retVal = 0;
 
     for (int i = 0; i < actions.size(); i++) {
-        if (actions[i] > biggest) {
-            biggest = actions[i];
+        if (rewards[currState][actionsRemaining[i]] > biggest) {
+            biggest = rewards[currState][actionsRemaining[i]];
             retVal = i;
         }
     }
 
 
     return retVal;
+}
+
+int Qtable::getRow(int action) {
+    if (action == 0 || action == 1 || action == 2) {
+        return 0;
+    }
+    else if (action == 3 || action == 4 || action == 5) {
+        return 1;
+    }
+    else if (action == 6 || action == 7 || action == 8) {
+        return 2;
+    }
+    else {
+        return 0;
+        //Will replace this with an exception class throw
+    }
+}
+
+int Qtable::getCol(int action) {
+    if (action == 0 || action == 3 || action == 6) {
+        return 0;
+    }
+    else if (action == 1 || action == 4 || action == 7) {
+        return 1;
+    }
+    else if (action == 2 || action == 5 || action == 8) {
+        return 2;
+    }
+    else {
+        return 0;
+        //Will replace this with an exception class throw
+    }
 }
