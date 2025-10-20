@@ -62,11 +62,14 @@ void Qalgorithm::iterate(int episodes) {
 
             TicTacToeBoard::PLAYER_TURN turn = board.getPlayerTurn();
             TicTacToeBoard::SQUARE_OCCUPANT mark;
+            TicTacToeBoard::SQUARE_OCCUPANT oppMark;
             if (turn == TicTacToeBoard::PLAYER_TURN::X_TURN) {
                 mark = TicTacToeBoard::SQUARE_OCCUPANT::X;
+                oppMark = TicTacToeBoard::SQUARE_OCCUPANT::O;
             }
             else {
                 mark = TicTacToeBoard::SQUARE_OCCUPANT::O;
+                oppMark = TicTacToeBoard::SQUARE_OCCUPANT::X;
             }
 
             int row = table.getRow(currentAction);
@@ -74,7 +77,9 @@ void Qalgorithm::iterate(int episodes) {
             
             board.setSquare(row, col, mark);
 
-            //Now we need to make that action non-choosable.
+            randomBoxPlayer(remainingActions, board, oppMark);
+
+
 
 
             int nextState;
@@ -99,4 +104,48 @@ void Qalgorithm::iterate(int episodes) {
 
 Qtable Qalgorithm::getQTable() {
     return table;
+}
+
+void Qalgorithm::randomBoxPlayer(vector<int>& remainingActions, TicTacToeBoard& board, TicTacToeBoard::SQUARE_OCCUPANT occupant) {
+    int randIndex = rand() % (remainingActions.size());
+
+    remainingActions.erase(remainingActions.begin() + randIndex);
+
+    int row = table.getRow(randIndex);
+    int col = table.getCol(randIndex);
+
+    board.setSquare(row, col, occupant);
+
+
+}
+
+void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
+
+    string boardString = "---------";
+
+    string outputMark, agentMark;
+    TicTacToeBoard::SQUARE_OCCUPANT agent;
+
+    int playerRow, playerCol;
+
+    if (player == TicTacToeBoard::SQUARE_OCCUPANT::X) {
+        outputMark = "X";
+        agentMark = "O";
+        agent = TicTacToeBoard::SQUARE_OCCUPANT::O;
+    }
+    else {
+        outputMark = "O";
+        agentMark = "X";
+        agent = TicTacToeBoard::SQUARE_OCCUPANT::X;
+    }
+
+    cout << "You will be playing as: " << outputMark << endl;
+    cout << "The AI will be playing as: " << agentMark << endl << endl;
+
+    TicTacToeBoard board(boardString);
+
+    board.printBoard();
+
+    //Play TicTacToe game very similar to our Heuristic assignment. I will just substitute the heuristic algorithm to find the max in our qTable
+    //given a specific state. Will finish later
 }

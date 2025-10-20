@@ -13,10 +13,14 @@ public:
     //and alters our table's values depending on our episode results
 
     void iterate(int episodes);
+    void playGame(TicTacToeBoard::SQUARE_OCCUPANT player);
 
     Qtable getQTable();
 
 private:
+
+    void randomBoxPlayer(vector<int>& remainingActions, TicTacToeBoard& board, TicTacToeBoard::SQUARE_OCCUPANT occupant);
+
     Qtable table;
     double epsilon;
     double alpha;
