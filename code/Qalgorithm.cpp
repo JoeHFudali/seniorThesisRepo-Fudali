@@ -148,4 +148,56 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
 
     //Play TicTacToe game very similar to our Heuristic assignment. I will just substitute the heuristic algorithm to find the max in our qTable
     //given a specific state. Will finish later
+
+    //For now, our board string will represent our current state
+    if (board.getPlayerTurn() == TicTacToeBoard::PLAYER_TURN::X_TURN && player == TicTacToeBoard::SQUARE_OCCUPANT::X) {
+        cout << "Enter in X's row: ";
+        cin >> playerRow;
+        cout << "Enter in X's col: ";
+        cin >> playerCol;
+
+        while ((board.getSquare(playerRow, playerCol) != TicTacToeBoard::SQUARE_OCCUPANT::EMPTY) 
+            || (playerRow < 0 || playerCol < 0) 
+            || (playerRow > board.getBoardDimension() - 1 || playerCol > board.getBoardDimension() - 1)) {
+            cout << "Oops! You entered a position that either doesn't exist or is already taken. Please enter a valid position!" << endl;
+            
+            cout << "Enter in X's row: ";
+            cin >> playerRow;
+            cout << "Enter in X's col: ";
+            cin >> playerCol;
+        }
+
+        cout << "Playing X at row " << playerRow << " and column " << playerCol << endl;
+
+        board.setSquare(playerRow, playerCol, player);
+
+
+    }
+    else if (board.getPlayerTurn() == TicTacToeBoard::PLAYER_TURN::O_TURN && player == TicTacToeBoard::SQUARE_OCCUPANT::O) {
+        cout << "Enter in O's row: ";
+        cin >> playerRow;
+        cout << "Enter in O's col: ";
+        cin >> playerCol;
+
+        while ((board.getSquare(playerRow, playerCol) != TicTacToeBoard::SQUARE_OCCUPANT::EMPTY)
+            || (playerRow < 0 || playerCol < 0)
+            || (playerRow > board.getBoardDimension() - 1 || playerCol > board.getBoardDimension() - 1)) {
+            cout << "Oops! You entered a position that either doesn't exist or is already taken. Please enter a valid position!" << endl;
+
+            cout << "Enter in O's row: ";
+            cin >> playerRow;
+            cout << "Enter in O's col: ";
+            cin >> playerCol;
+        }
+
+        cout << "Playing O at row " << playerRow << " and column " << playerCol << endl;
+
+        board.setSquare(playerRow, playerCol, player);
+    }
+    else if (board.getPlayerTurn() == TicTacToeBoard::PLAYER_TURN::X_TURN && player == TicTacToeBoard::SQUARE_OCCUPANT::O) {
+        cout << "AI Agent's turn" << endl;
+
+        //Will create a function that retrieves the max result, might use the one designed in the Qtable function.
+    }
+    board.printBoard();
 }
