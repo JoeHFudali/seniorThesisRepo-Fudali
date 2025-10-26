@@ -9,7 +9,7 @@ public:
 
     Qtable();
 
-    void constructTable(vector<int> actionInputs);
+    void constructTable(vector<string> actionLabels, vector<string> stateLabels);
 
 
 
@@ -26,9 +26,14 @@ public:
     int getRow(int action);
     int getCol(int action);
 
+    void printTable();
+
 private:
     vector<int> actions;
     vector<int> states;
+
+    vector<string> actionStrings;
+    vector<string> stateStrings;
 
     vector<vector<double>> rewards;
 

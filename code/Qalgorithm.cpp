@@ -4,13 +4,13 @@ using namespace std;
 
 //Constrctor mostly used to set up our constant values, such as the epsilon-greedy value.
 
-Qalgorithm::Qalgorithm(double eps, double alp, double gam) {
+Qalgorithm::Qalgorithm(double eps, double alp, double gam, vector<string> actionLabels, vector<string> stateLabels) {
     epsilon = eps;
     alpha = alp;
     gamma = gam;
 
-    table.constructTable({ 0, 1, 2, 3, 4, 5, 6, 7, 8 });
 
+    table.constructTable(actionLabels, stateLabels);
 }
 
 void Qalgorithm::iterate(int episodes) {
@@ -33,7 +33,7 @@ void Qalgorithm::iterate(int episodes) {
             //We will use a dictionary or a similar container (enum?) to store/access our current state and the number associated with it
 
 
-            int currentState;
+            int currentState = 0;
             int currentAction;
 
 
@@ -82,7 +82,7 @@ void Qalgorithm::iterate(int episodes) {
 
 
 
-            int nextState;
+            int nextState = 0;
             //nextState = getState(board.getBoardString());
 
             int nextAction = table.getActionMax(remainingActions, nextState);
@@ -201,7 +201,7 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
             //For now, we are using our boardString as the state, but this will change later
             string currState = board.getBoardString();
 
-            int bestAction;
+            int bestAction = 0;
             //This will get the best option for the current state, and we will get the row and column for our choice using this value
             //bestAction = table.getActionMax(remainingActions, currState);
 
@@ -218,7 +218,7 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
             //For now, we are using our boardString as the state, but this will change later
             string currState = board.getBoardString();
 
-            int bestAction;
+            int bestAction = 0;
             //This will get the best option for the current state, and we will get the row and column for our choice using this value
             //bestAction = table.getActionMax(remainingActions, currState);
 

@@ -4,23 +4,41 @@
 using namespace std;
 
 Qtable::Qtable() {
-    vector<string> actionLabels = {"Top Left", "Top Middle", "Top Right", 
-               "Middle Left", "Middle", "Middle Right",
-               "Bottom Left", "Bottom Middle", "Bottom Right"};
+    
 
     //We will initialize states to have all combinations of taken spots.
     //This won't account for type of symbol (X or O), just how many are taken
     //and where they are taken.
 
-    for(int i = 0; i < states.size(); i++) {
-        for(int j = 0; j < actions.size(); j++) {
+    
+}
+
+void Qtable::constructTable(vector<string> actionLabels, vector<string> stateLabels) {
+    for (int i = 0; i < actionLabels.size(); i++) {
+        actions.push_back(i);
+    }
+
+    for (int i = 0; i < stateLabels.size(); i++) {
+        states.push_back(i);
+    }
+
+    rewards.resize(actions.size());
+    for (int i = 0; i < rewards.size(); i++) {
+        rewards[i].resize(states.size());
+    }
+
+
+    for (int i = 0; i < actions.size(); i++) {
+        for (int j = 0; j < states.size(); j++) {
             rewards[i][j] = 0.0;
         }
     }
-}
 
-void Qtable::constructTable(vector<int> actionInputs) {
-    actions = actionInputs;
+    actionStrings = actionLabels;
+    stateStrings = stateLabels;
+
+    printTable();
+
 }
 
 vector<int> Qtable::getStates() {
@@ -86,4 +104,22 @@ int Qtable::getCol(int action) {
         return 0;
         //Will replace this with an exception class throw
     }
+}
+
+void Qtable::printTable() {
+    cout << "         ";
+    for (int i = 0; i < 8; i++) {
+        cout << "| " << stateStrings[i] << " |";
+    }
+    cout << "|" << endl;
+    cout << "---------------------------------------------------------------------------------------" << endl;
+
+
+    for (int i = 0; i < actions.size(); i++) {
+        cout << actionStrings[i] << " Fill |    ";
+        for (int j = 0; j < 8; j++) {
+            cout << rewards[i][j] << "    |    ";
+        }
+        cout << endl;
+   }
 }
