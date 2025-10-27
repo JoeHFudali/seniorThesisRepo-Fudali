@@ -14,44 +14,46 @@ Qtable::Qtable() {
 }
 
 void Qtable::constructTable(vector<string> actionLabels, vector<string> stateLabels) {
-    for (int i = 0; i < actionLabels.size(); i++) {
-        actions.push_back(i);
-    }
 
-    for (int i = 0; i < stateLabels.size(); i++) {
-        states.push_back(i);
-    }
-
-    rewards.resize(actions.size());
+    rewards.resize(actionLabels.size());
     for (int i = 0; i < rewards.size(); i++) {
-        rewards[i].resize(states.size());
+        rewards[i].resize(stateLabels.size());
     }
 
+    //For now, we will assume X wins are desired by the agent, and O wins are losses
 
-    for (int i = 0; i < actions.size(); i++) {
-        for (int j = 0; j < states.size(); j++) {
-            rewards[i][j] = 0.0;
+    for (int i = 0; i < actionLabels.size(); i++) {
+        for (int j = 0; j < stateLabels.size(); j++) {
+            TicTacToeBoard tempBoard(stateLabels[j]);
+            if (tempBoard.getBoardState() == TicTacToeBoard::BOARD_STATE::X_WIN) {
+                rewards[i][j] = 1.0;
+            }
+            else if (tempBoard.getBoardState() == TicTacToeBoard::BOARD_STATE::O_WIN) {
+                rewards[i][j] = -1.0;
+            }
+            else {
+                rewards[i][j] = 0.0;
+            }
         }
     }
 
     actionStrings = actionLabels;
     stateStrings = stateLabels;
 
-    printTable();
 
 }
 
-vector<int> Qtable::getStates() {
-    return states;
+vector<string> Qtable::getStates() {
+    return stateStrings;
 }
 
-vector<int> Qtable::getActions() {
-    return actions;
+vector<string> Qtable::getActions() {
+    return actionStrings;
 }
 
 
-void Qtable::setQValue(int state, int action, double value) {
-    rewards[state][action] = value;
+void Qtable::setQValue(int action, int state, double value) {
+    rewards[action][state] = value;
 }
 
 
@@ -60,16 +62,14 @@ vector<vector<double>> Qtable::getRewards() {
 }
 
 int Qtable::getActionMax(vector<int> actionsRemaining, int currState) {
-    double biggest = rewards[currState][0];
+    double biggest = rewards[actionsRemaining[0]][currState];
     int retVal = 0;
-
-    for (int i = 0; i < actions.size(); i++) {
-        if (rewards[currState][actionsRemaining[i]] > biggest) {
-            biggest = rewards[currState][actionsRemaining[i]];
+    for (int i = 0; i < actionsRemaining.size(); i++) {
+        if (rewards[actionsRemaining[i]][currState] > biggest) {
+            biggest = rewards[actionsRemaining[i]][currState];
             retVal = i;
         }
     }
-
 
     return retVal;
 }
@@ -106,6 +106,20 @@ int Qtable::getCol(int action) {
     }
 }
 
+int Qtable::getState(string boardString) {
+    int retVal = 0;
+
+    for (int i = 0; i < stateStrings.size(); i++) {
+        if (stateStrings[i] == boardString) {
+            retVal = i;
+            return retVal;
+        }
+    }
+
+    retVal = -1;
+    return retVal;
+}
+
 void Qtable::printTable() {
     cout << "         ";
     for (int i = 0; i < 8; i++) {
@@ -115,7 +129,7 @@ void Qtable::printTable() {
     cout << "---------------------------------------------------------------------------------------" << endl;
 
 
-    for (int i = 0; i < actions.size(); i++) {
+    for (int i = 0; i < actionStrings.size(); i++) {
         cout << actionStrings[i] << " Fill |    ";
         for (int j = 0; j < 8; j++) {
             cout << rewards[i][j] << "    |    ";

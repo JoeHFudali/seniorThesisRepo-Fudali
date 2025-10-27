@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "TicTacToeBoard.h"
 
 using namespace std;
 
@@ -13,10 +14,10 @@ public:
 
 
 
-    vector<int> getStates();
-    vector<int> getActions();
+    vector<string> getStates();
+    vector<string> getActions();
 
-    void setQValue(int state, int action, double value);
+    void setQValue(int action, int state, double value);
 
     vector<vector<double>> getRewards();
 
@@ -26,11 +27,11 @@ public:
     int getRow(int action);
     int getCol(int action);
 
+    int getState(string boardString);
+
     void printTable();
 
 private:
-    vector<int> actions;
-    vector<int> states;
 
     vector<string> actionStrings;
     vector<string> stateStrings;

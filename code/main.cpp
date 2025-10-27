@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Qalgorithm.h"
 #include <set>
+#include <random>
 using namespace std;
 
 struct Node {
@@ -16,22 +17,20 @@ void createHelper(Node* pNode, set<string>& boards);
 int main()
 {
 
-    //Biggest questions for this are state generation/decision, difference between Q(A, S) and reward in our actual algorithm, and possible 
-    //reworks to some functions in Qtable/Qalgorithm regarding actions
+    srand(time(0));
+
 
     set<string> uniqueBoardStrings;
     createBoardStrings(uniqueBoardStrings);
-    //for (string board : uniqueBoardStrings) {
-    //    cout << board << endl;
-    //}
+
     cout << "Number of Unique Board Strings: " << uniqueBoardStrings.size() << endl;
 
     vector<string> boardStrings(uniqueBoardStrings.begin(), uniqueBoardStrings.end());
-    cout << "works!" << endl;
+
     Qalgorithm al(0.1, 0.5, 0.2, {"Top Left", "Top Middle", "Top Right", "Middle Left", "Middle", "Middel Right", "Bottom Left", "Bottom Middle", "Bottom Right"}, boardStrings);
 
-    //al.iterate(20);
-
+    al.iterate(50000);
+    al.getQTable().printTable();
 
     return 0;
 }
