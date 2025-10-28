@@ -27,9 +27,9 @@ int main()
 
     vector<string> boardStrings(uniqueBoardStrings.begin(), uniqueBoardStrings.end());
 
-    Qalgorithm al(0.1, 0.5, 0.2, {"Top Left", "Top Middle", "Top Right", "Middle Left", "Middle", "Middel Right", "Bottom Left", "Bottom Middle", "Bottom Right"}, boardStrings);
-
-    al.iterate(50000);
+    Qalgorithm al(0.1, 0.5, 0.2, {"TL", "TM", "TR", "ML", "MM", "MR", "BL", "BM", "BR"}, boardStrings);
+    
+    al.iterate(5000);
     al.getQTable().printTable();
 
     return 0;
@@ -74,8 +74,8 @@ void createHelper(Node* pNode, set<string>& boards) {
 
                     child->board = new TicTacToeBoard(pNode->board->getBoardString());
                     child->board->setSquare(row, col, mark);
-                    boards.insert(child->board->getBoardString());
 
+                    boards.insert(child->board->getBoardString());
                     pNode->children.push_back(child);
 
                     createHelper(child, boards);

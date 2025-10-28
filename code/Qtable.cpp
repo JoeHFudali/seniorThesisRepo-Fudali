@@ -15,16 +15,16 @@ Qtable::Qtable() {
 
 void Qtable::constructTable(vector<string> actionLabels, vector<string> stateLabels) {
 
-    rewards.resize(actionLabels.size());
+    rewards.resize(stateLabels.size());
     for (int i = 0; i < rewards.size(); i++) {
-        rewards[i].resize(stateLabels.size());
+        rewards[i].resize(actionLabels.size());
     }
 
     //For now, we will assume X wins are desired by the agent, and O wins are losses
 
-    for (int i = 0; i < actionLabels.size(); i++) {
-        for (int j = 0; j < stateLabels.size(); j++) {
-            TicTacToeBoard tempBoard(stateLabels[j]);
+    for (int i = 0; i < stateLabels.size(); i++) {
+        for (int j = 0; j < actionLabels.size(); j++) {
+            TicTacToeBoard tempBoard(stateLabels[i]);
             if (tempBoard.getBoardState() == TicTacToeBoard::BOARD_STATE::X_WIN) {
                 rewards[i][j] = 1.0;
             }
@@ -53,20 +53,19 @@ vector<string> Qtable::getActions() {
 
 
 void Qtable::setQValue(int action, int state, double value) {
-    rewards[action][state] = value;
+    rewards[state][action] = value;
 }
-
 
 vector<vector<double>> Qtable::getRewards() {
     return rewards;
 }
 
 int Qtable::getActionMax(vector<int> actionsRemaining, int currState) {
-    double biggest = rewards[actionsRemaining[0]][currState];
+    double biggest = rewards[currState][actionsRemaining[0]];
     int retVal = 0;
     for (int i = 0; i < actionsRemaining.size(); i++) {
-        if (rewards[actionsRemaining[i]][currState] > biggest) {
-            biggest = rewards[actionsRemaining[i]][currState];
+        if (rewards[currState][actionsRemaining[i]] > biggest) {
+            biggest = rewards[currState][actionsRemaining[i]];
             retVal = i;
         }
     }
@@ -121,18 +120,18 @@ int Qtable::getState(string boardString) {
 }
 
 void Qtable::printTable() {
-    cout << "         ";
-    for (int i = 0; i < 8; i++) {
-        cout << "| " << stateStrings[i] << " |";
-    }
-    cout << "|" << endl;
-    cout << "---------------------------------------------------------------------------------------" << endl;
-
-
+    cout << "     ";
     for (int i = 0; i < actionStrings.size(); i++) {
-        cout << actionStrings[i] << " Fill |    ";
-        for (int j = 0; j < 8; j++) {
-            cout << rewards[i][j] << "    |    ";
+        cout << right << setw(5) <<  "|" << actionStrings[i];
+    }
+    cout << right << setw(5) << "|" << endl;
+    cout << "---------+------+------+------+------+------+------+------+------+------+----------------------------" << endl;
+
+
+    for (int i = 0; i < stateStrings.size(); i++) {
+        cout << stateStrings[i] << "|";
+        for (int j = 0; j < actionStrings.size(); j++) {
+            cout << right << setw(6) << rewards[i][j] << "|";
         }
         cout << endl;
    }

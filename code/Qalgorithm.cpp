@@ -45,8 +45,7 @@ void Qalgorithm::iterate(int episodes) {
 
 
             currentState = table.getState(board.getBoardString()); //getState will look through the afformentioned dictionary and retrieve the index for table use
-            
-
+           
             //We will need to minimize our actions here based on our current state before deciding the best action.
 
             if (randNum < epsilon) {
@@ -84,6 +83,7 @@ void Qalgorithm::iterate(int episodes) {
             
             board.setSquare(row, col, mark);
 
+
             if (board.getBoardState() != TicTacToeBoard::BOARD_STATE::INCOMPLETE_GAME) {
                 int nextState = table.getState(board.getBoardString());
                 
@@ -95,9 +95,9 @@ void Qalgorithm::iterate(int episodes) {
                     nextAction = table.getActionMax(remainingActions, nextState);
                 }
 
-                double currentQValue = table.getRewards()[currentAction][currentState];
+                double currentQValue = table.getRewards()[currentState][currentAction];
 
-                double newValue = currentQValue + alpha * (currentQValue + gamma * table.getRewards()[nextAction][nextState] - currentQValue);
+                double newValue = currentQValue + alpha * (currentQValue + gamma * table.getRewards()[nextState][nextAction] - currentQValue);
 
                 table.setQValue(currentAction, currentState, newValue);
 
@@ -112,6 +112,7 @@ void Qalgorithm::iterate(int episodes) {
 
             int nextState = table.getState(board.getBoardString());
             int nextAction;
+
             if (remainingActions.size() == 0) {
                 nextAction = currentAction;
             }
@@ -120,18 +121,17 @@ void Qalgorithm::iterate(int episodes) {
             }
             
             
-            double currentQValue = table.getRewards()[currentAction][currentState];
+            double currentQValue = table.getRewards()[currentState][currentAction];
             
-            double newValue = currentQValue + alpha * (currentQValue + gamma * table.getRewards()[nextAction][nextState] - currentQValue);
-            
+            double newValue = currentQValue + alpha * (currentQValue + gamma * table.getRewards()[nextState][nextAction] - currentQValue);
+
             table.setQValue(currentAction, currentState, newValue);
-
+            
          }
-
 
     }
 
-
+    
 }
 
 Qtable Qalgorithm::getQTable() {
