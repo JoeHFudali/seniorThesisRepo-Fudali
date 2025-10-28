@@ -128,49 +128,49 @@ Setting up a majority of my algorithm, as well as better understanding the TicTa
 
 ### The challenges I faced this week were:
 
-Understanding how my states should be laid out and deciding how the Agent should be trained. I am not sure what would be acceptable/possible for the state dimension of my Q-table - if I should generate every single board combination, if I should make the marks seperate or just count a space as "taken", and more. As for the training, I believe it would be too inefficient to train against a human, but I also do not know if training against another agent or a program that randomly picks spots is good enough for training.
+Understanding how my states should be laid out and deciding how the Agent should be trained. I am not sure what would be acceptable/possible for the state dimension of my Q-table - if I should generate every single board combination, if I should make the marks seperate or just count a space as "taken", and more. As for the training, I believe it would be too inefficient to train against a human, but I also do not know if training against another agent or a program that randomly picks spots is good enough for training. 
 
 ---
 
 ## Week 8 Summary (10/20/2025)
 ### This week I worked on:
 
-[Your answer here]
+Implementing a play game function, importing in the TicTacToeBoard class, implementing non-repeatable actions, and worked on the Q-algorithm and Q-table classes.
 
 ### This week I learned:
 
-[Your answer here]
+How to properly implement non-repeatabe action with a Q-learning algorithm. It was not fully complete by the end of this week, and there were some bugs, but I learned a lot more about how to properly incorporate this element of TicTacToe in my project.
 
 ### My successes this week were:
 
-[Your answer here]
+Properly implementing the game function into the program was the biggest success this week, as well as figuring out how to properly have files added to the github repo show up on my IDE (something I have had trouble with personally). 
 
 ### The challenges I faced this week were:
 
-[Your answer here]
+My biggest challenges were implementing the non-repeatable actions. This was something I still had problems with in the next week, and just trying to think out how to connect this with Q-learning was a challenge, but was doable.
 
 ---
 
-## Week 9 Summary (MM/DD/YYYY)
+## Week 9 Summary (10/27/2025)
 ### This week I worked on:
 
-[Your answer here]
+Getting a primitive print function for the Q-table, and getting the training function for the program "finished". I also reworked some of the data from the Q-table class and finished the state generation for the Q-table. 
 
 ### This week I learned:
 
-[Your answer here]
+How to properly format the Q-table data for our Q-algorithm, including the generation of our states, and how it's set up for our rewards table.
 
 ### My successes this week were:
 
-[Your answer here]
+Implementing a basic Q-learning function that generates a proper rewards table. With this being the big part of my project, having the algorithm produce an output for our rewards table is a big step in my project. I also succeeded in the fact that my reworks to my Q-table 
 
 ### The challenges I faced this week were:
 
-[Your answer here]
+Figuring out just how to implement in the training function was a lot more challenging than I first thought. It required a lot of reworking to my already existing functions/classes, and lots of debugging in areas I was not exactly sure where the problems laid. I still have some work to do on it too, such as tuning the parameters so that the rewards aren't crazily high or low values.
 
 ---
 
-## Week 10 Summary (MM/DD/YYYY)
+## Week 10 Summary (11/03/2025)
 ### This week I worked on:
 
 [Your answer here]
