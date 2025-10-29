@@ -10,9 +10,11 @@ Qtable::Qtable() {
     //This won't account for type of symbol (X or O), just how many are taken
     //and where they are taken.
 
-    
+    //EDIT: This has changed and we are now using every board string combo as aa state. This results in 5478 unique board strings.
 }
 
+
+//Builds out the table based on inputed action/state labels
 void Qtable::constructTable(vector<string> actionLabels, vector<string> stateLabels) {
 
     rewards.resize(stateLabels.size());
@@ -43,23 +45,27 @@ void Qtable::constructTable(vector<string> actionLabels, vector<string> stateLab
 
 }
 
+//Returns the state label strings (board strings)
 vector<string> Qtable::getStates() {
     return stateStrings;
 }
 
+//Returns the action labels ("TL", "MM", "BR", etc.)
 vector<string> Qtable::getActions() {
     return actionStrings;
 }
 
-
+//Reward table setter
 void Qtable::setQValue(int action, int state, double value) {
     rewards[state][action] = value;
 }
 
+//Reward table getter
 vector<vector<double>> Qtable::getRewards() {
     return rewards;
 }
 
+//Returns the index of the action with the max reward result, given a current state and a list of avaliable actions
 int Qtable::getActionMax(vector<int> actionsRemaining, int currState) {
     double biggest = rewards[currState][actionsRemaining[0]];
     int retVal = 0;
@@ -73,6 +79,7 @@ int Qtable::getActionMax(vector<int> actionsRemaining, int currState) {
     return retVal;
 }
 
+//Action row getter
 int Qtable::getRow(int action) {
     if (action == 0 || action == 1 || action == 2) {
         return 0;
@@ -89,6 +96,8 @@ int Qtable::getRow(int action) {
     }
 }
 
+
+//Action column getter
 int Qtable::getCol(int action) {
     if (action == 0 || action == 3 || action == 6) {
         return 0;
@@ -105,6 +114,7 @@ int Qtable::getCol(int action) {
     }
 }
 
+//State getter
 int Qtable::getState(string boardString) {
     int retVal = 0;
 
@@ -119,6 +129,7 @@ int Qtable::getState(string boardString) {
     return retVal;
 }
 
+//Prints out our rewards table, actions acting as the columns and states as the rows
 void Qtable::printTable() {
     cout << "     ";
     for (int i = 0; i < actionStrings.size(); i++) {

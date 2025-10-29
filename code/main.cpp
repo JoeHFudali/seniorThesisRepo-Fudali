@@ -17,9 +17,7 @@ void playGame(TicTacToeBoard::SQUARE_OCCUPANT player, Qalgorithm al);
 
 int main()
 {
-
     srand(time(0));
-
 
     set<string> uniqueBoardStrings;
     createBoardStrings(uniqueBoardStrings);
@@ -30,14 +28,16 @@ int main()
 
     Qalgorithm al(0.1, 0.5, 0.2, {"TL", "TM", "TR", "ML", "MM", "MR", "BL", "BM", "BR"}, boardStrings);
     
-    al.iterate(15000);
-    //al.getQTable().printTable();
+    al.iterate(10000);
     TicTacToeBoard::SQUARE_OCCUPANT player = TicTacToeBoard::SQUARE_OCCUPANT::O;
     playGame(player, al);
+
+    al.getQTable().printTable();
 
     return 0;
 }
 
+//Creates our string state labels
 void createBoardStrings(set<string>& boards) {
     Node* nHead = new Node;
 
@@ -54,6 +54,7 @@ void createBoardStrings(set<string>& boards) {
 
 }
 
+//Recurrsive helper to createBoardStrings
 void createHelper(Node* pNode, set<string>& boards) {
 
     if (pNode->board->getBoardState() == TicTacToeBoard::BOARD_STATE::INCOMPLETE_GAME) {
@@ -95,6 +96,7 @@ void createHelper(Node* pNode, set<string>& boards) {
 
 }
 
+//Plays the game with an inputted player symbol and Q-algorithm
 void playGame(TicTacToeBoard::SQUARE_OCCUPANT player, Qalgorithm al) {
     char yOrN = 'y';
     while (yOrN == 'y') {

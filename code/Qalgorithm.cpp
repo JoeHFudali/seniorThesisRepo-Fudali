@@ -14,6 +14,7 @@ Qalgorithm::Qalgorithm(double eps, double alp, double gam, vector<string> action
     table.constructTable(actionLabels, stateLabels);
 }
 
+//Training function for our algorithm
 void Qalgorithm::iterate(int episodes) {
 
     
@@ -83,6 +84,7 @@ void Qalgorithm::iterate(int episodes) {
             
             board.setSquare(row, col, mark);
 
+            //Actual Q-algorithm below, first for when we get an agent win
 
             if (board.getBoardState() != TicTacToeBoard::BOARD_STATE::INCOMPLETE_GAME) {
                 int nextState = table.getState(board.getBoardString());
@@ -105,9 +107,6 @@ void Qalgorithm::iterate(int episodes) {
             }
 
             randomBoxPlayer(remainingActions, board, oppMark);
-
-
-            //Actual Q-algorithm below
 
 
             int nextState = table.getState(board.getBoardString());
@@ -138,6 +137,7 @@ Qtable Qalgorithm::getQTable() {
     return table;
 }
 
+//Training helper that plays against the algorithm
 void Qalgorithm::randomBoxPlayer(vector<int>& remainingActions, TicTacToeBoard& board, TicTacToeBoard::SQUARE_OCCUPANT occupant) {
     int randIndex = rand() % (remainingActions.size());
 
@@ -151,6 +151,7 @@ void Qalgorithm::randomBoxPlayer(vector<int>& remainingActions, TicTacToeBoard& 
 
 }
 
+//Function that lets you play a game of TicTacToe through the terminal with the algorithm
 void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
 
     string boardString = "---------";
@@ -185,6 +186,8 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
 
     while (board.getBoardState() == TicTacToeBoard::BOARD_STATE::INCOMPLETE_GAME) {
         //For now, our board string will represent our current state
+
+        //Player turn (X)
         if (board.getPlayerTurn() == TicTacToeBoard::PLAYER_TURN::X_TURN && player == TicTacToeBoard::SQUARE_OCCUPANT::X) {
             cout << "Enter in X's row: ";
             cin >> playerRow;
@@ -216,6 +219,7 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
 
 
         }
+        //Player turn (O)
         else if (board.getPlayerTurn() == TicTacToeBoard::PLAYER_TURN::O_TURN && player == TicTacToeBoard::SQUARE_OCCUPANT::O) {
             cout << "Enter in O's row: ";
             cin >> playerRow;
@@ -245,6 +249,7 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
 
             board.setSquare(playerRow, playerCol, player);
         }
+        //Agent Turn (X)
         else if (board.getPlayerTurn() == TicTacToeBoard::PLAYER_TURN::X_TURN && player == TicTacToeBoard::SQUARE_OCCUPANT::O) {
             cout << "AI Agent's turn" << endl;
 
@@ -263,6 +268,7 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
 
             board.setSquare(agentRow, agentCol, agent);
         }
+        //Agent turn (O)
         else {
             cout << "AI Agent's turn" << endl;
 
