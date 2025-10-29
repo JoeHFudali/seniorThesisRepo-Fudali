@@ -191,9 +191,9 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
             cout << "Enter in X's col: ";
             cin >> playerCol;
 
-            while ((board.getSquare(playerRow, playerCol) != TicTacToeBoard::SQUARE_OCCUPANT::EMPTY)
-                || (playerRow < 0 || playerCol < 0)
-                || (playerRow > board.getBoardDimension() - 1 || playerCol > board.getBoardDimension() - 1)) {
+            while ((playerRow < 0 || playerCol < 0)
+                || (playerRow > board.getBoardDimension() - 1 || playerCol > board.getBoardDimension() - 1)
+                || (board.getSquare(playerRow, playerCol) != TicTacToeBoard::SQUARE_OCCUPANT::EMPTY)) {
                 cout << "Oops! You entered a position that either doesn't exist or is already taken. Please enter a valid position!" << endl;
 
                 cout << "Enter in X's row: ";
@@ -202,7 +202,12 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
                 cin >> playerCol;
             }
 
-            int index = playerRow * 1 + playerCol;
+            int choice = playerRow * 3 + playerCol;
+            int index = 0;
+            for (int i = 0; i < remainingActions.size(); i++) {
+                if (remainingActions[i] == choice)
+                    index = i;
+            }
             remainingActions.erase(remainingActions.begin() + index);
 
             cout << "Playing X at row " << playerRow << " and column " << playerCol << endl;
@@ -217,9 +222,9 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
             cout << "Enter in O's col: ";
             cin >> playerCol;
 
-            while ((board.getSquare(playerRow, playerCol) != TicTacToeBoard::SQUARE_OCCUPANT::EMPTY)
-                || (playerRow < 0 || playerCol < 0)
-                || (playerRow > board.getBoardDimension() - 1 || playerCol > board.getBoardDimension() - 1)) {
+            while ((playerRow < 0 || playerCol < 0)
+                || (playerRow > board.getBoardDimension() - 1 || playerCol > board.getBoardDimension() - 1) 
+                || (board.getSquare(playerRow, playerCol) != TicTacToeBoard::SQUARE_OCCUPANT::EMPTY)) {
                 cout << "Oops! You entered a position that either doesn't exist or is already taken. Please enter a valid position!" << endl;
 
                 cout << "Enter in O's row: ";
@@ -228,7 +233,12 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
                 cin >> playerCol;
             }
 
-            int index = playerRow * 1 + playerCol;
+            int choice = playerRow * 3 + playerCol;
+            int index = 0;
+            for (int i = 0; i < remainingActions.size(); i++) {
+                if (remainingActions[i] == choice)
+                    index = i;
+            }
             remainingActions.erase(remainingActions.begin() + index);
 
             cout << "Playing O at row " << playerRow << " and column " << playerCol << endl;
@@ -244,8 +254,8 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
             //This will get the best option for the current state, and we will get the row and column for our choice using this value
             int bestAction = table.getActionMax(remainingActions, currState);
 
-            agentRow = table.getRow(bestAction);
-            agentCol = table.getCol(bestAction);
+            agentRow = table.getRow(remainingActions[bestAction]);
+            agentCol = table.getCol(remainingActions[bestAction]);
 
             remainingActions.erase(remainingActions.begin() + bestAction);
 
@@ -262,8 +272,8 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
             //This will get the best option for the current state, and we will get the row and column for our choice using this value
             int bestAction = table.getActionMax(remainingActions, currState);
 
-            agentRow = table.getRow(bestAction);
-            agentCol = table.getCol(bestAction);
+            agentRow = table.getRow(remainingActions[bestAction]);
+            agentCol = table.getCol(remainingActions[bestAction]);
 
             remainingActions.erase(remainingActions.begin() + bestAction);
 
@@ -275,12 +285,12 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
     }
 
     if (board.getBoardState() == TicTacToeBoard::BOARD_STATE::X_WIN) {
-        cout << "** X wins! **" << endl;
+        cout << "** X wins! **" << endl << endl;
     }
     else if (board.getBoardState() == TicTacToeBoard::BOARD_STATE::O_WIN) {
-        cout << "** O wins! **" << endl;
+        cout << "** O wins! **" << endl << endl;
     }
     else {
-        cout << "** Draw **" << endl;
+        cout << "** Draw **" << endl << endl;
     }
 }

@@ -13,6 +13,7 @@ struct Node {
 
 void createBoardStrings(set<string>& boards);
 void createHelper(Node* pNode, set<string>& boards);
+void playGame(TicTacToeBoard::SQUARE_OCCUPANT player, Qalgorithm al);
 
 int main()
 {
@@ -29,8 +30,10 @@ int main()
 
     Qalgorithm al(0.1, 0.5, 0.2, {"TL", "TM", "TR", "ML", "MM", "MR", "BL", "BM", "BR"}, boardStrings);
     
-    al.iterate(5000);
-    al.getQTable().printTable();
+    al.iterate(15000);
+    //al.getQTable().printTable();
+    TicTacToeBoard::SQUARE_OCCUPANT player = TicTacToeBoard::SQUARE_OCCUPANT::O;
+    playGame(player, al);
 
     return 0;
 }
@@ -90,4 +93,17 @@ void createHelper(Node* pNode, set<string>& boards) {
 
     }
 
+}
+
+void playGame(TicTacToeBoard::SQUARE_OCCUPANT player, Qalgorithm al) {
+    char yOrN = 'y';
+    while (yOrN == 'y') {
+        cout << "Playing a TicTacToe game" << endl;
+
+        al.playGame(player);
+
+        cout << "would you like to play again? (enter y for yes or any other key for no)" << endl;
+        cin >> yOrN;
+        cin.get();
+    }
 }
