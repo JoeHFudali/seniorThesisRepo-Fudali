@@ -21,18 +21,27 @@ int main()
 
     set<string> uniqueBoardStrings;
     createBoardStrings(uniqueBoardStrings);
+    int episodes = 50000;
 
     cout << "Number of Unique Board Strings: " << uniqueBoardStrings.size() << endl;
 
     vector<string> boardStrings(uniqueBoardStrings.begin(), uniqueBoardStrings.end());
 
-    Qalgorithm al(0.1, 0.5, 0.2, {"TL", "TM", "TR", "ML", "MM", "MR", "BL", "BM", "BR"}, boardStrings);
+    //Qalgorithm al(0.1, 0.5, 0.2, {"TL", "TM", "TR", "ML", "MM", "MR", "BL", "BM", "BR"}, boardStrings);
     
-    al.iterate(10000);
+    //al.iterate(episodes);
     TicTacToeBoard::SQUARE_OCCUPANT player = TicTacToeBoard::SQUARE_OCCUPANT::O;
-    playGame(player, al);
+    //playGame(player, al);
 
-    al.getQTable().printTable();
+
+    //al.SaveData("C:/Users/joedi/Desktop/C++_external_files/ThesisOutput.txt", episodes);
+
+    //al.getQTable().printTable();
+
+    Qalgorithm loadedAlgoritm;
+
+    loadedAlgoritm.LoadData("C:/Users/joedi/Desktop/C++_external_files/ThesisOutput.txt");
+    playGame(player, loadedAlgoritm);
 
     return 0;
 }

@@ -7,6 +7,7 @@ using namespace std;
 
 class Qalgorithm {
 public:
+    Qalgorithm();
     Qalgorithm(double eps, double alp, double gam, vector<string> actionLabels, vector<string> stateLabels);
 
     //We will include a "run" function that takes the Q-table, plays games of TicTacToe,
@@ -16,6 +17,9 @@ public:
     void playGame(TicTacToeBoard::SQUARE_OCCUPANT player);
 
     Qtable getQTable();
+
+    void SaveData(string outputFile, int episodes);
+    void LoadData(string inputFile);
 
 private:
 

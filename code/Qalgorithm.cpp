@@ -3,6 +3,13 @@
 
 using namespace std;
 
+
+Qalgorithm::Qalgorithm() {
+    epsilon = 0;
+    alpha = 0;
+    gamma = 0;
+}
+
 //Constrctor mostly used to set up our constant values, such as the epsilon-greedy value.
 
 Qalgorithm::Qalgorithm(double eps, double alp, double gam, vector<string> actionLabels, vector<string> stateLabels) {
@@ -299,4 +306,100 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
     else {
         cout << "** Draw **" << endl << endl;
     }
+}
+
+void Qalgorithm::SaveData(string outputFile, int episodes) {
+    ofstream fout;
+
+    fout.open(outputFile);
+
+    if (fout.is_open()) {
+        fout << episodes << " ";
+        fout << alpha << " ";
+        fout << gamma << " ";
+        fout << epsilon << endl;
+
+        for (string actionLabel : table.getActions()) {
+            fout << actionLabel << " ";
+        }
+        fout << "\n";
+
+        for (string stateLabel : table.getStates()) {
+            fout << stateLabel << " ";
+        }
+        fout << "\n";
+
+
+        for (int i = 0; i < table.getStates().size(); i++) {
+            for (int j = 0; j < table.getActions().size(); j++) {
+                fout << table.getRewards()[i][j] << " ";
+            }
+            fout << "\n";
+        }
+        
+        cout << "Data succesfully saved!" << endl;
+    }
+    else {
+        cerr << "Error. File could not be opened!" << endl;
+    }
+
+    fout.close();
+}
+
+void Qalgorithm::LoadData(string inputFile) {
+    ifstream fin;
+
+    fin.open(inputFile);
+    string episodes;
+
+    if (fin.is_open()) {
+        
+        fin >> episodes;
+        fin >> alpha;
+        fin >> gamma;
+        fin >> epsilon;
+
+        vector<string> loadedActions;
+        string action;
+        for (int i = 0; i < 9; i++) {
+            fin >> action;
+            loadedActions.push_back(action);
+        }
+
+        vector<string> loadedStates;
+        string state;
+        for (int i = 0; i < 5478; i++) {
+            fin >> state;
+            loadedStates.push_back(state);
+        }
+
+        table.constructTable(loadedActions, loadedStates);
+
+
+
+        double rewardVal;
+
+        for (int i = 0; i < table.getStates().size(); i++) {
+            for (int j = 0; j < table.getActions().size(); j++) {
+                fin >> rewardVal;
+                table.setQValue(j, i, rewardVal);
+            }
+        }
+
+        cout << "Succesfully loaded the file" << endl;
+
+        cout << "The number of episodes this algorithm trained on was: " << episodes << endl;
+        cout << "Alpha value: " << alpha << endl;
+        cout << "Gamma value: " << gamma << endl;
+        cout << "Epsilon value: " << epsilon << endl;
+
+        cout << "Resulting Q-table:" << endl;
+
+        //table.printTable();
+    }
+    else {
+        cerr << "Error. Could not open file." << endl;
+    }
+
+    fin.close();
 }
