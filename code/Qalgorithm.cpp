@@ -10,7 +10,7 @@ Qalgorithm::Qalgorithm() {
     gamma = 0;
 }
 
-//Constrctor mostly used to set up our constant values, such as the epsilon-greedy value.
+//Constrctor mostly used to set up our constant values, such as the epsilon-greedy value. 
 
 Qalgorithm::Qalgorithm(double eps, double alp, double gam, vector<string> actionLabels, vector<string> stateLabels) {
     epsilon = eps;
@@ -33,6 +33,8 @@ void Qalgorithm::iterate(int episodes) {
 
         //Need to account for the fact that these actions cannot be repeated in the same game
         vector<int> remainingActions = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+
+        double reward = 0.0;
 
         //We will put the entirety of the below code into a while loop that looks something like this:
         while(board.getBoardState() == TicTacToeBoard::BOARD_STATE::INCOMPLETE_GAME) {
@@ -94,6 +96,7 @@ void Qalgorithm::iterate(int episodes) {
             //Actual Q-algorithm below, first for when we get an agent win
 
             if (board.getBoardState() != TicTacToeBoard::BOARD_STATE::INCOMPLETE_GAME) {
+                reward = 1.0;
                 int nextState = table.getState(board.getBoardString());
                 
                 int nextAction;
@@ -116,6 +119,10 @@ void Qalgorithm::iterate(int episodes) {
             randomBoxPlayer(remainingActions, board, oppMark);
 
 
+            if (board.getBoardState() == TicTacToeBoard::BOARD_STATE::O_WIN) {
+                reward = 1.0;
+            }
+
             int nextState = table.getState(board.getBoardString());
             int nextAction;
 
@@ -129,9 +136,15 @@ void Qalgorithm::iterate(int episodes) {
             
             double currentQValue = table.getRewards()[currentState][currentAction];
             
-            double newValue = currentQValue + alpha * (currentQValue + gamma * table.getRewards()[nextState][nextAction] - currentQValue);
+            double newValue = currentQValue + alpha * (reward + gamma * table.getRewards()[nextState][nextAction] - currentQValue);
 
             table.setQValue(currentAction, currentState, newValue);
+
+            //Our learning rate decays over time
+
+            if (epsilon > 0.1) {
+                epsilon *= .9999;
+            }
             
          }
 
@@ -146,6 +159,7 @@ Qtable Qalgorithm::getQTable() {
 
 //Training helper that plays against the algorithm
 void Qalgorithm::randomBoxPlayer(vector<int>& remainingActions, TicTacToeBoard& board, TicTacToeBoard::SQUARE_OCCUPANT occupant) {
+
     int randIndex = rand() % (remainingActions.size());
 
     int row = table.getRow(remainingActions[randIndex]);
@@ -395,7 +409,7 @@ void Qalgorithm::LoadData(string inputFile) {
 
         cout << "Resulting Q-table:" << endl;
 
-        //table.printTable();
+        table.printTable();
     }
     else {
         cerr << "Error. Could not open file." << endl;

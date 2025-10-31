@@ -27,7 +27,7 @@ int main()
 
     vector<string> boardStrings(uniqueBoardStrings.begin(), uniqueBoardStrings.end());
 
-    //Qalgorithm al(0.1, 0.5, 0.2, {"TL", "TM", "TR", "ML", "MM", "MR", "BL", "BM", "BR"}, boardStrings);
+    //Qalgorithm al(0.5, 0.2, 0.9, {"TL", "TM", "TR", "ML", "MM", "MR", "BL", "BM", "BR"}, boardStrings);
     
     //al.iterate(episodes);
     TicTacToeBoard::SQUARE_OCCUPANT player = TicTacToeBoard::SQUARE_OCCUPANT::O;
