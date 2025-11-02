@@ -4,8 +4,6 @@
 using namespace std;
 
 Qtable::Qtable() {
-    
-
     //We will initialize states to have all combinations of taken spots.
     //This won't account for type of symbol (X or O), just how many are taken
     //and where they are taken.
@@ -13,36 +11,35 @@ Qtable::Qtable() {
     //EDIT: This has changed and we are now using every board string combo as aa state. This results in 5478 unique board strings.
 }
 
+Qtable::~Qtable() {
+    delete rewards;
+    rewards = 0;
+}
+
 
 //Builds out the table based on inputed action/state labels
 void Qtable::constructTable(vector<string> actionLabels, vector<string> stateLabels) {
 
-    rewards.resize(stateLabels.size());
-    for (int i = 0; i < rewards.size(); i++) {
-        rewards[i].resize(actionLabels.size());
-    }
-
     //For now, we will assume X wins are desired by the agent, and O wins are losses
 
+    rewards = new unordered_map<string, vector<double>>();
+
     for (int i = 0; i < stateLabels.size(); i++) {
+        string currBoardString = stateLabels[i];
+        (*rewards)[stateLabels[i]].resize(actionLabels.size());
         for (int j = 0; j < actionLabels.size(); j++) {
-            TicTacToeBoard tempBoard(stateLabels[i]);
-            if (tempBoard.getBoardState() == TicTacToeBoard::BOARD_STATE::X_WIN) {
-                rewards[i][j] = 1.0;
-            }
-            else if (tempBoard.getBoardState() == TicTacToeBoard::BOARD_STATE::O_WIN) {
-                rewards[i][j] = -1.0;
+            if (currBoardString[j] != '-') {
+                (*rewards)[stateLabels[i]][j] = -1.0;
             }
             else {
-                rewards[i][j] = 0.0;
+                (*rewards)[stateLabels[i]][j] = 0.0;
             }
         }
     }
 
     actionStrings = actionLabels;
     stateStrings = stateLabels;
-
-
+    
 }
 
 //Returns the state label strings (board strings)
@@ -56,22 +53,22 @@ vector<string> Qtable::getActions() {
 }
 
 //Reward table setter
-void Qtable::setQValue(int action, int state, double value) {
-    rewards[state][action] = value;
+void Qtable::setQValue(int action, string boardString, double value) {
+    (*rewards)[boardString][action] = value;
 }
 
 //Reward table getter
-vector<vector<double>> Qtable::getRewards() {
+unordered_map<string, vector<double>>* Qtable::getRewards() {
     return rewards;
 }
 
 //Returns the index of the action with the max reward result, given a current state and a list of avaliable actions
-int Qtable::getActionMax(vector<int> actionsRemaining, int currState) {
-    double biggest = rewards[currState][actionsRemaining[0]];
+int Qtable::getActionMax(string currState) {
+    double biggest = (*rewards)[currState][0];
     int retVal = 0;
-    for (int i = 0; i < actionsRemaining.size(); i++) {
-        if (rewards[currState][actionsRemaining[i]] > biggest) {
-            biggest = rewards[currState][actionsRemaining[i]];
+    for (int i = 0; i < actionStrings.size(); i++) {
+        if ((*rewards)[currState][i] > biggest) {
+            biggest = (*rewards)[currState][i];
             retVal = i;
         }
     }
@@ -114,21 +111,6 @@ int Qtable::getCol(int action) {
     }
 }
 
-//State getter
-int Qtable::getState(string boardString) {
-    int retVal = 0;
-
-    for (int i = 0; i < stateStrings.size(); i++) {
-        if (stateStrings[i] == boardString) {
-            retVal = i;
-            return retVal;
-        }
-    }
-
-    retVal = -1;
-    return retVal;
-}
-
 //Prints out our rewards table, actions acting as the columns and states as the rows
 void Qtable::printTable() {
     cout << "     ";
@@ -142,7 +124,7 @@ void Qtable::printTable() {
     for (int i = 0; i < stateStrings.size(); i++) {
         cout << stateStrings[i] << "|";
         for (int j = 0; j < actionStrings.size(); j++) {
-            cout << right << setw(6) << rewards[i][j] << "|";
+            cout << right << setw(6) << (*rewards)[stateStrings[i]][j] << "|";
         }
         cout << endl;
    }

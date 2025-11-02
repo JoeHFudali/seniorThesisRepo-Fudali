@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <vector>
 #include <string>
+#include <unordered_map>
 #include "TicTacToeBoard.h"
 
 using namespace std;
@@ -11,6 +12,7 @@ class Qtable {
 public:
 
     Qtable();
+    ~Qtable();
 
     void constructTable(vector<string> actionLabels, vector<string> stateLabels);
 
@@ -19,17 +21,15 @@ public:
     vector<string> getStates();
     vector<string> getActions();
 
-    void setQValue(int action, int state, double value);
+    void setQValue(int action, string boardString, double value);
 
-    vector<vector<double>> getRewards();
+    unordered_map<string, vector<double>>* getRewards();
 
     //Change this to getActionMax
-    int getActionMax(vector<int> actionsRemaining, int currState);
+    int getActionMax(string currState);
 
     int getRow(int action);
     int getCol(int action);
-
-    int getState(string boardString);
 
     void printTable();
 
@@ -38,7 +38,7 @@ private:
     vector<string> actionStrings;
     vector<string> stateStrings;
 
-    vector<vector<double>> rewards;
+    unordered_map<string, vector<double>>* rewards;
 
     
 

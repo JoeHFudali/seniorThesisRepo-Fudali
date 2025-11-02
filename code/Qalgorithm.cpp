@@ -8,6 +8,8 @@ Qalgorithm::Qalgorithm() {
     epsilon = 0;
     alpha = 0;
     gamma = 0;
+
+    table = new Qtable();
 }
 
 //Constrctor mostly used to set up our constant values, such as the epsilon-greedy value. 
@@ -17,22 +19,27 @@ Qalgorithm::Qalgorithm(double eps, double alp, double gam, vector<string> action
     alpha = alp;
     gamma = gam;
 
+    table = new Qtable();
+    table->constructTable(actionLabels, stateLabels);
+}
 
-    table.constructTable(actionLabels, stateLabels);
+//Destructor to delete the table pointer
+Qalgorithm::~Qalgorithm() {
+    delete table;
+    table = 0;
 }
 
 //Training function for our algorithm
 void Qalgorithm::iterate(int episodes) {
 
-    
+    TicTacToeBoard::SQUARE_OCCUPANT mark = TicTacToeBoard::SQUARE_OCCUPANT::X;
+    TicTacToeBoard::SQUARE_OCCUPANT oppMark = TicTacToeBoard::SQUARE_OCCUPANT::O;
 
     for(int i = 0; i < episodes; i++) {
 
+
         string boardString = "---------";
         TicTacToeBoard board(boardString);
-
-        //Need to account for the fact that these actions cannot be repeated in the same game
-        vector<int> remainingActions = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
 
         double reward = 0.0;
 
@@ -48,136 +55,111 @@ void Qalgorithm::iterate(int episodes) {
             double randNum = dis(gen);
 
             //We will use a dictionary or a similar container (enum?) to store/access our current state and the number associated with it
-
-
-            int currentState;
             int currentAction;
 
 
-            currentState = table.getState(board.getBoardString()); //getState will look through the afformentioned dictionary and retrieve the index for table use
+            string currentState = board.getBoardString(); //getState will look through the afformentioned dictionary and retrieve the index for table use
            
             //We will need to minimize our actions here based on our current state before deciding the best action.
 
             if (randNum < epsilon) {
-                int randIndex = rand() % (remainingActions.size());
-
-                currentAction = remainingActions[randIndex];
-
-                remainingActions.erase(remainingActions.begin() + randIndex);
+                currentAction = getRandIndex(currentState);
 
             }
             else {
-                currentAction = remainingActions[table.getActionMax(remainingActions, currentState)];
+                currentAction = table->getActionMax(currentState);
                 
-                remainingActions.erase(remainingActions.begin() + table.getActionMax(remainingActions, currentState));
-
             }
 
             //Do something like b1.setSquare() based on what our action is and what is represents (coords in this case)
             //We get new state based on new board string, our reward from the cross state/action done, and check if we are done
 
-            TicTacToeBoard::PLAYER_TURN turn = board.getPlayerTurn();
-            TicTacToeBoard::SQUARE_OCCUPANT mark;
-            TicTacToeBoard::SQUARE_OCCUPANT oppMark;
-            if (turn == TicTacToeBoard::PLAYER_TURN::X_TURN) {
-                mark = TicTacToeBoard::SQUARE_OCCUPANT::X;
-                oppMark = TicTacToeBoard::SQUARE_OCCUPANT::O;
-            }
-            else {
-                mark = TicTacToeBoard::SQUARE_OCCUPANT::O;
-                oppMark = TicTacToeBoard::SQUARE_OCCUPANT::X;
-            }
-
-            int row = table.getRow(currentAction);
-            int col = table.getCol(currentAction);
+            int row = table->getRow(currentAction);
+            int col = table->getCol(currentAction);
             
             board.setSquare(row, col, mark);
+
 
             //Actual Q-algorithm below, first for when we get an agent win
 
             if (board.getBoardState() != TicTacToeBoard::BOARD_STATE::INCOMPLETE_GAME) {
                 reward = 1.0;
-                int nextState = table.getState(board.getBoardString());
+
+                string nextState = currentState;
                 
-                int nextAction;
-                if (remainingActions.size() == 0) {
-                    nextAction = currentAction;
-                }
-                else {
-                    nextAction = table.getActionMax(remainingActions, nextState);
-                }
+                int nextAction = table->getActionMax(nextState);
 
-                double currentQValue = table.getRewards()[currentState][currentAction];
+                double currentQValue = (*table->getRewards())[currentState][currentAction];
 
-                double newValue = currentQValue + alpha * (currentQValue + gamma * table.getRewards()[nextState][nextAction] - currentQValue);
+                double newValue = currentQValue + alpha * (reward + gamma * (*table->getRewards())[nextState][nextAction] - currentQValue);
 
-                table.setQValue(currentAction, currentState, newValue);
+                table->setQValue(currentAction, currentState, newValue);
 
                 break;
             }
 
-            randomBoxPlayer(remainingActions, board, oppMark);
+            randomBoxPlayer(board, oppMark);
+            
 
+            string nextState = board.getBoardString();
 
             if (board.getBoardState() == TicTacToeBoard::BOARD_STATE::O_WIN) {
-                reward = 1.0;
-            }
-
-            int nextState = table.getState(board.getBoardString());
-            int nextAction;
-
-            if (remainingActions.size() == 0) {
-                nextAction = currentAction;
-            }
-            else {
-                nextAction = table.getActionMax(remainingActions, nextState);
+                reward = -1.0;
+                nextState = currentState;
             }
             
+            int nextAction = table->getActionMax(nextState);
+
+            double currentQValue = (*table->getRewards())[currentState][currentAction];
             
-            double currentQValue = table.getRewards()[currentState][currentAction];
-            
-            double newValue = currentQValue + alpha * (reward + gamma * table.getRewards()[nextState][nextAction] - currentQValue);
+            double newValue = currentQValue + alpha * (reward + gamma * (*table->getRewards())[nextState][nextAction] - currentQValue);
 
-            table.setQValue(currentAction, currentState, newValue);
-
-            //Our learning rate decays over time
-
-            if (epsilon > 0.1) {
-                epsilon *= .9999;
-            }
+            table->setQValue(currentAction, currentState, newValue);
             
          }
+        //Our learning rate decays over time
+        if (epsilon > 0.1) {
+            epsilon *= .9999;
+        }
 
     }
 
     
 }
 
-Qtable Qalgorithm::getQTable() {
+Qtable* Qalgorithm::getQtable() {
     return table;
 }
 
 //Training helper that plays against the algorithm
-void Qalgorithm::randomBoxPlayer(vector<int>& remainingActions, TicTacToeBoard& board, TicTacToeBoard::SQUARE_OCCUPANT occupant) {
+void Qalgorithm::randomBoxPlayer(TicTacToeBoard& board, TicTacToeBoard::SQUARE_OCCUPANT occupant) {
+    //Also come back to this later, since it uses a random index (that cannot be so random)
+    int actionChoice = getRandIndex(board.getBoardString());
 
-    int randIndex = rand() % (remainingActions.size());
-
-    int row = table.getRow(remainingActions[randIndex]);
-    int col = table.getCol(remainingActions[randIndex]);
-
-    remainingActions.erase(remainingActions.begin() + randIndex);
+    int row = table->getRow(actionChoice);
+    int col = table->getCol(actionChoice);
 
     board.setSquare(row, col, occupant);
 
 
 }
 
+//Function that selects a random action index based on the actions we can still take
+int Qalgorithm::getRandIndex(string boardString) {
+    vector<int> choices;
+    for (int i = 0; i < boardString.size(); i++) {
+        if (boardString[i] == '-') {
+            choices.push_back(i);
+        }
+    }
+
+    return choices[rand() % choices.size()];
+}
+
 //Function that lets you play a game of TicTacToe through the terminal with the algorithm
 void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
 
     string boardString = "---------";
-
-    vector<int> remainingActions = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
 
     string outputMark, agentMark;
     TicTacToeBoard::SQUARE_OCCUPANT agent;
@@ -227,12 +209,6 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
             }
 
             int choice = playerRow * 3 + playerCol;
-            int index = 0;
-            for (int i = 0; i < remainingActions.size(); i++) {
-                if (remainingActions[i] == choice)
-                    index = i;
-            }
-            remainingActions.erase(remainingActions.begin() + index);
 
             cout << "Playing X at row " << playerRow << " and column " << playerCol << endl;
 
@@ -260,11 +236,6 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
 
             int choice = playerRow * 3 + playerCol;
             int index = 0;
-            for (int i = 0; i < remainingActions.size(); i++) {
-                if (remainingActions[i] == choice)
-                    index = i;
-            }
-            remainingActions.erase(remainingActions.begin() + index);
 
             cout << "Playing O at row " << playerRow << " and column " << playerCol << endl;
 
@@ -275,15 +246,13 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
             cout << "AI Agent's turn" << endl;
 
             //For now, we are using our boardString as the state, but this will change later
-            int currState = table.getState(board.getBoardString());
+            string currState = board.getBoardString();
 
             //This will get the best option for the current state, and we will get the row and column for our choice using this value
-            int bestAction = table.getActionMax(remainingActions, currState);
+            int bestAction = table->getActionMax(currState);
 
-            agentRow = table.getRow(remainingActions[bestAction]);
-            agentCol = table.getCol(remainingActions[bestAction]);
-
-            remainingActions.erase(remainingActions.begin() + bestAction);
+            agentRow = table->getRow(bestAction);
+            agentCol = table->getCol(bestAction);
 
             cout << "Playing X at row " << agentRow << " and column " << agentCol << endl;
 
@@ -294,15 +263,13 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
             cout << "AI Agent's turn" << endl;
 
             //For now, we are using our boardString as the state, but this will change later
-            int currState = table.getState(board.getBoardString());
+            string currState = board.getBoardString();
 
             //This will get the best option for the current state, and we will get the row and column for our choice using this value
-            int bestAction = table.getActionMax(remainingActions, currState);
+            int bestAction = table->getActionMax(currState);
 
-            agentRow = table.getRow(remainingActions[bestAction]);
-            agentCol = table.getCol(remainingActions[bestAction]);
-
-            remainingActions.erase(remainingActions.begin() + bestAction);
+            agentRow = table->getRow(bestAction);
+            agentCol = table->getCol(bestAction);
 
             cout << "Playing O at row " << agentRow << " and column " << agentCol << endl;
 
@@ -333,20 +300,20 @@ void Qalgorithm::SaveData(string outputFile, int episodes) {
         fout << gamma << " ";
         fout << epsilon << endl;
 
-        for (string actionLabel : table.getActions()) {
+        for (string actionLabel : table->getActions()) {
             fout << actionLabel << " ";
         }
         fout << "\n";
 
-        for (string stateLabel : table.getStates()) {
+        for (string stateLabel : table->getStates()) {
             fout << stateLabel << " ";
         }
         fout << "\n";
 
 
-        for (int i = 0; i < table.getStates().size(); i++) {
-            for (int j = 0; j < table.getActions().size(); j++) {
-                fout << table.getRewards()[i][j] << " ";
+        for (int i = 0; i < table->getStates().size(); i++) {
+            for (int j = 0; j < table->getActions().size(); j++) {
+                fout << (*table->getRewards())[table->getStates()[i]][j] << " ";
             }
             fout << "\n";
         }
@@ -382,21 +349,21 @@ void Qalgorithm::LoadData(string inputFile) {
 
         vector<string> loadedStates;
         string state;
-        for (int i = 0; i < 5478; i++) {
+        for (int i = 0; i < 2423; i++) {
             fin >> state;
             loadedStates.push_back(state);
         }
-
-        table.constructTable(loadedActions, loadedStates);
+        table = new Qtable();
+        table->constructTable(loadedActions, loadedStates);
 
 
 
         double rewardVal;
 
-        for (int i = 0; i < table.getStates().size(); i++) {
-            for (int j = 0; j < table.getActions().size(); j++) {
+        for (int i = 0; i < table->getStates().size(); i++) {
+            for (int j = 0; j < table->getActions().size(); j++) {
                 fin >> rewardVal;
-                table.setQValue(j, i, rewardVal);
+                table->setQValue(j, table->getStates()[i], rewardVal);
             }
         }
 
@@ -409,7 +376,7 @@ void Qalgorithm::LoadData(string inputFile) {
 
         cout << "Resulting Q-table:" << endl;
 
-        table.printTable();
+        table->printTable();
     }
     else {
         cerr << "Error. Could not open file." << endl;

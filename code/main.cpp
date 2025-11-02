@@ -21,27 +21,24 @@ int main()
 
     set<string> uniqueBoardStrings;
     createBoardStrings(uniqueBoardStrings);
-    int episodes = 50000;
+    int episodes = 1000000;
 
     cout << "Number of Unique Board Strings: " << uniqueBoardStrings.size() << endl;
 
     vector<string> boardStrings(uniqueBoardStrings.begin(), uniqueBoardStrings.end());
 
-    //Qalgorithm al(0.5, 0.2, 0.9, {"TL", "TM", "TR", "ML", "MM", "MR", "BL", "BM", "BR"}, boardStrings);
+    Qalgorithm al(0.6, 0.1, 0.9, {"TL", "TM", "TR", "ML", "MM", "MR", "BL", "BM", "BR"}, boardStrings);
     
-    //al.iterate(episodes);
+    al.iterate(episodes);
     TicTacToeBoard::SQUARE_OCCUPANT player = TicTacToeBoard::SQUARE_OCCUPANT::O;
-    //playGame(player, al);
+    playGame(player, al);
 
+    //al.getQtable()->printTable();
 
-    //al.SaveData("C:/Users/joedi/Desktop/C++_external_files/ThesisOutput.txt", episodes);
+    //Qalgorithm loadedAlgoritm;
 
-    //al.getQTable().printTable();
-
-    Qalgorithm loadedAlgoritm;
-
-    loadedAlgoritm.LoadData("C:/Users/joedi/Desktop/C++_external_files/ThesisOutput.txt");
-    playGame(player, loadedAlgoritm);
+    //loadedAlgoritm.LoadData("C:/Users/joedi/Desktop/C++_external_files/ThesisOutput.txt");
+    //playGame(player, loadedAlgoritm);
 
     return 0;
 }
@@ -88,7 +85,12 @@ void createHelper(Node* pNode, set<string>& boards) {
                     child->board = new TicTacToeBoard(pNode->board->getBoardString());
                     child->board->setSquare(row, col, mark);
 
-                    boards.insert(child->board->getBoardString());
+                    if (child->board->getPlayerTurn() == TicTacToeBoard::PLAYER_TURN::X_TURN) {
+                        if (child->board->getBoardState() == TicTacToeBoard::BOARD_STATE::INCOMPLETE_GAME) {
+                            boards.insert(child->board->getBoardString());
+                        }
+                    }
+                    
                     pNode->children.push_back(child);
 
                     createHelper(child, boards);
