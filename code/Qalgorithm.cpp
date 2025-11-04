@@ -26,7 +26,7 @@ Qalgorithm::Qalgorithm(double eps, double alp, double gam, vector<string> action
 //Destructor to delete the table pointer
 Qalgorithm::~Qalgorithm() {
     delete table;
-    table = 0;
+    table = nullptr;
 }
 
 //Training function for our algorithm

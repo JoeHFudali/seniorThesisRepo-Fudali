@@ -7,13 +7,15 @@ Qtable::Qtable() {
     //We will initialize states to have all combinations of taken spots.
     //This won't account for type of symbol (X or O), just how many are taken
     //and where they are taken.
+    rewards = new unordered_map<string, vector<double>>();
+
 
     //EDIT: This has changed and we are now using every board string combo as aa state. This results in 5478 unique board strings.
 }
 
 Qtable::~Qtable() {
     delete rewards;
-    rewards = 0;
+    rewards = nullptr;
 }
 
 
@@ -21,8 +23,6 @@ Qtable::~Qtable() {
 void Qtable::constructTable(vector<string> actionLabels, vector<string> stateLabels) {
 
     //For now, we will assume X wins are desired by the agent, and O wins are losses
-
-    rewards = new unordered_map<string, vector<double>>();
 
     for (int i = 0; i < stateLabels.size(); i++) {
         string currBoardString = stateLabels[i];

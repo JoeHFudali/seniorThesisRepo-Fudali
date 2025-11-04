@@ -13,7 +13,6 @@ struct Node {
 
 void createBoardStrings(set<string>& boards);
 void createHelper(Node* pNode, set<string>& boards);
-void playGame(TicTacToeBoard::SQUARE_OCCUPANT player, Qalgorithm al);
 
 int main()
 {
@@ -31,14 +30,20 @@ int main()
     
     al.iterate(episodes);
     TicTacToeBoard::SQUARE_OCCUPANT player = TicTacToeBoard::SQUARE_OCCUPANT::O;
-    playGame(player, al);
+    
 
-    //al.getQtable()->printTable();
+    char yOrN = 'y';
+    while (yOrN == 'y') {
+        cout << "Playing a TicTacToe game" << endl << endl;
 
-    //Qalgorithm loadedAlgoritm;
+        al.playGame(player);
 
-    //loadedAlgoritm.LoadData("C:/Users/joedi/Desktop/C++_external_files/ThesisOutput.txt");
-    //playGame(player, loadedAlgoritm);
+        cout << "would you like to play again? (enter y for yes or any other key for no)" << endl;
+        cin >> yOrN;
+        cin.get();
+    }
+
+    al.getQtable()->printTable();
 
     return 0;
 }
@@ -105,18 +110,4 @@ void createHelper(Node* pNode, set<string>& boards) {
 
     }
 
-}
-
-//Plays the game with an inputted player symbol and Q-algorithm
-void playGame(TicTacToeBoard::SQUARE_OCCUPANT player, Qalgorithm al) {
-    char yOrN = 'y';
-    while (yOrN == 'y') {
-        cout << "Playing a TicTacToe game" << endl;
-
-        al.playGame(player);
-
-        cout << "would you like to play again? (enter y for yes or any other key for no)" << endl;
-        cin >> yOrN;
-        cin.get();
-    }
 }
