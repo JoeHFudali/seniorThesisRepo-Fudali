@@ -173,19 +173,19 @@ Figuring out just how to implement in the training function was a lot more chall
 ## Week 10 Summary (11/03/2025)
 ### This week I worked on:
 
-[Your answer here]
+I reworked my print function to output a nicer Q-table, and fixed my Q-algorithm to run faster and produce a better result. 
 
 ### This week I learned:
 
-[Your answer here]
+Pointers are very good for using when iterating over data tens of thousands of times. Also, I learned just exactly what values work best for my parameters, and that using an Unordered map for my rewards makes the reward accessing process a lot easier.
 
 ### My successes this week were:
 
-[Your answer here]
+Improving the training function's runtime was a big success for this week. Having the fucntion run faster not only gives me more time to work on other functionality in my thesis, but also allows me to run over more episodes to get a better result for my agent.
 
 ### The challenges I faced this week were:
 
-[Your answer here]
+Trying to find what part of my program was really slowing down the training was my biggest challenge this week. At first, I believed it was the fact my Q-table results were stored as a 2D vector, and changed this to an unordered map of string keys and value double vectors. However, after this did not result in a faster runtime, I spent a long time trying to figure this out before coming to the conclusion that I should turn my reward data into pointers. This resulted in a much faster time, but it did take quite some headaches to figure out.
 
 ---
 
