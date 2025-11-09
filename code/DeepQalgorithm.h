@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
-
+#include <vector>
+#include "Neural_Network.h"
 
 using namespace std;
 
@@ -11,6 +12,9 @@ public:
 	~DeepQalgorithm();
 
 
+	double calculateLoss();
+
+
 private:
 
 	struct ExReplay {
@@ -19,6 +23,10 @@ private:
 		double reward;
 		string newState;
 	};
+
+	vector<ExReplay> ExRepayBuffer;
+	Neural_Network Qnetwork;
+	Neural_Network Tnetwork;
 
 	double epsilon;
 	double alpha;

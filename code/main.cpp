@@ -2,6 +2,7 @@
 #include "Qalgorithm.h"
 #include <set>
 #include <random>
+#include "DeepQalgorithm.h"
 using namespace std;
 
 struct Node {
