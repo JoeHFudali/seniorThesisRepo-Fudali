@@ -7,7 +7,7 @@
 
 using namespace std;
 
-Neural_Network::Neural_Network(vector<int>& architecture, vector<vector<double>>& trainingData, vector<vector<double>>& labelData, double lr, int nti) {
+Neural_Network::Neural_Network(vector<int>& architecture, vector<vector<double>>& trainingData, vector<vector<double>>& labelData, double lr, int nti, bool doTrain) {
     numberOfTrainingIterations = nti;
 
     Layer::setLearningRate(lr);
@@ -23,8 +23,14 @@ Neural_Network::Neural_Network(vector<int>& architecture, vector<vector<double>>
     
     currentLayer->setNextLayer(new OutputLayer(architecture[architecture.size() - 2], architecture[architecture.size() - 1]));
 
-    train(trainingData, labelData);
+    if (doTrain) {
+        train(trainingData, labelData);
+    }
+    
 }
+
+
+
 
 Neural_Network::~Neural_Network() {
     Layer* currentLayer = firstLayer;
