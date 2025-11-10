@@ -189,26 +189,26 @@ Trying to find what part of my program was really slowing down the training was 
 
 ---
 
-## Week 11 Summary (MM/DD/YYYY)
+## Week 11 Summary (11/10/2025)
 ### This week I worked on:
 
-[Your answer here]
+I worked on fixing a deconstructor bug and also beginning to implement a Deep Q Algorithm to use for Tic Tac Toe.
 
 ### This week I learned:
 
-[Your answer here]
+That you shouldn't pass in a class variable into a function when it has a destructor, and I also learned various elements that go into a Deep Q Learning Algorithm.
 
 ### My successes this week were:
 
-[Your answer here]
+Finding and fixing the deconstructor bug, which had to do with passing in a class element into a function in my main. ALso understanding Deep Q learning better, since it is quite a confusing topic itself
 
 ### The challenges I faced this week were:
 
-[Your answer here]
+Trying (at first) to understand how Deep Q Learning works. Looking into the topic gave me a very daunting look at it, because not only does it include Neural Networks to decide different actions, but also has the Experience Replay Buffer, A target network alongside the Q Neural Network, and back propogation.
 
 ---
 
-## Week 12 Summary (MM/DD/YYYY)
+## Week 12 Summary (11/17/2025)
 ### This week I worked on:
 
 [Your answer here]
