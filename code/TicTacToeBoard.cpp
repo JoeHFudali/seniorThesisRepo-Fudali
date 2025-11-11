@@ -391,3 +391,46 @@ void TicTacToeBoard::printBoard()
         }
     }
 }
+
+
+int TicTacToeBoard::getRow(int actionIndex) {
+    if (actionIndex == 0 || actionIndex == 1 || actionIndex == 2) {
+        return 0;
+    }
+    else if (actionIndex == 3 || actionIndex == 4 || actionIndex == 5) {
+        return 1;
+    }
+    else if (actionIndex == 6 || actionIndex == 7 || actionIndex == 8) {
+        return 2;
+    }
+    else {
+        return 0;
+        //Will replace this with an exception class throw
+    }
+}
+
+int TicTacToeBoard::getCol(int actionIndex) {
+    if (actionIndex == 0 || actionIndex == 3 || actionIndex == 6) {
+        return 0;
+    }
+    else if (actionIndex == 1 || actionIndex == 4 || actionIndex == 7) {
+        return 1;
+    }
+    else if (actionIndex == 2 || actionIndex == 5 || actionIndex == 8) {
+        return 2;
+    }
+    else {
+        return 0;
+        //Will replace this with an exception class throw
+    }
+}
+
+void TicTacToeBoard::resetBoard() {
+    int boardSize = getBoardDimension();
+    boardString = "";
+
+    for (int i = 0; i < boardSize * boardSize; i++) {
+        boardString.append("-");
+    }
+
+}

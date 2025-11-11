@@ -10,14 +10,16 @@ class DeepQalgorithm {
 public:
 
 	DeepQalgorithm();
-	DeepQalgorithm(double lr, double discount, double greedy, int bufferSize);
+	DeepQalgorithm(double lr, double discount, double greedy, int bufferSize, int batchSize);
 	~DeepQalgorithm();
 
-
-	double calculateLoss();
-	void backPropogate();
+	void trainNetworks();
+	double calculateMeanError(double qValue, double tValue);
+	void backPropogate(double error);
 	
 	void collectData();
+
+	void playGame();
 
 private:
 
@@ -30,16 +32,21 @@ private:
 
 	vector<ExReplay> sampleExperiences(int batchSize);
 	int getRandAction(vector<double> actions);
+	int getMaxAction(vector<double> actions);
+
+	void randomBoxPlayer(vector<double> stateNums);
 
 	vector<ExReplay> ExReplayBuffer;
 	Qnetwork* qNetwork;
-	Neural_Network* Tnetwork;
+	Qnetwork* tNetwork;
 
 	//Our output layer for both of these NN will be the number of actions we can take.
 
 	double epsilon;
 	double alpha;
 	double gamma;
+
+	int batch;
 
 	TicTacToeBoard* board;
 };

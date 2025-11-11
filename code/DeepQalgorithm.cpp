@@ -13,14 +13,18 @@ DeepQalgorithm::DeepQalgorithm() {
 	ExReplayBuffer.resize(10000);
 	vector<int> architecture = { 9, 12, 12, 9 };
 
+	batch = 9;
+
 	board = new TicTacToeBoard();
 	//Qnetwork = new Neural_Network(architecture)
 }
 
-DeepQalgorithm::DeepQalgorithm(double learningRate, double discount, double greedy, int bufferSize) {
+DeepQalgorithm::DeepQalgorithm(double learningRate, double discount, double greedy, int bufferSize, int batchSize) {
 	alpha = learningRate;
 	gamma = discount;
 	epsilon = greedy;
+
+	batch = batchSize;
 
 	ExReplayBuffer.resize(bufferSize);
 
@@ -40,11 +44,11 @@ DeepQalgorithm::~DeepQalgorithm() {
 	board = 0;
 }
 
-double DeepQalgorithm::calculateLoss() {
+double DeepQalgorithm::calculateMeanError(double qValue, double tValue) {
 
 }
 
-void DeepQalgorithm::backPropogate() {
+void DeepQalgorithm::backPropogate(double error) {
 
 }
 
@@ -60,36 +64,159 @@ vector<DeepQalgorithm::ExReplay> DeepQalgorithm::sampleExperiences(int batchSize
 }
 
 void DeepQalgorithm::collectData() {
-	string boardState = board->getBoardString();
-	vector<double> stateNums;
-	//I will set state nums to be equal to certain values that can be inputed into our predict function
-	
-	random_device rd;
-	mt19937 gen(rd());
+	//Very crude implementation for our collection function that fills our Experience Replay Buffer, will fix after some consultation with the professor
+	for (int i = 0; i < ExReplayBuffer.size(); i++) {
+		double reward = 0.0;
+		string boardState = board->getBoardString();
+		vector<double> stateNums;
+		string newBoardString;
+		//I will set state nums to be equal to certain values that can be inputed into our predict function
 
-	uniform_real_distribution<> dis(0.0, 1.0);
+		random_device rd;
+		mt19937 gen(rd());
 
-	double randNum = dis(gen);
+		uniform_real_distribution<> dis(0.0, 1.0);
 
-	int currentAction;
+		double randNum = dis(gen);
 
-	vector<double> actionProbs = qNetwork->predictQActions(stateNums);
+		int currentAction;
+
+		vector<double> actionProbs = qNetwork->predictQActions(stateNums);
 
 
-	//We will need to minimize our actions here based on our current state before deciding the best action.
 
-	if (randNum < epsilon) {
-		currentAction = getRandIndex(actionProbs);
+		if (randNum < epsilon) {
+			currentAction = getRandAction(actionProbs);
+
+		}
+		else {
+			currentAction = getMaxAction(actionProbs);
+		}
+
+		int row = board->getRow(currentAction);
+		int col = board->getCol(currentAction);
+
+		board->setSquare(row, col, TicTacToeBoard::SQUARE_OCCUPANT::X);
+
+		newBoardString = board->getBoardString();
+
+		if (board->getBoardState() != TicTacToeBoard::BOARD_STATE::INCOMPLETE_GAME) {
+
+			if (board->getBoardState() == TicTacToeBoard::BOARD_STATE::X_WIN) {
+				reward = 1.0;
+			}
+			board->resetBoard();
+		}
+
+		ExReplay newReplay;
+		newReplay.startState = boardState;
+		newReplay.action = currentAction;
+		newReplay.reward = reward;
+		newReplay.newState = newBoardString;
+
+		ExReplayBuffer.push_back(newReplay);
+
+
+
+		//stateNums = some new thing based on our new string newBoardString
+		boardState = newBoardString;
+
+		randomBoxPlayer(stateNums);
+		
+		newBoardString = board->getBoardString();
+
+		if (board->getBoardState() != TicTacToeBoard::BOARD_STATE::INCOMPLETE_GAME) {
+			board->resetBoard();
+		}
+
 
 	}
-	else {
-		currentAction = table->getActionMax(boardState);
 
-	}
 }
 
-int DeepQalgorithm::getRandIndex(vector<double> actions) {
+int DeepQalgorithm::getRandAction(vector<double> actions) {
 	int randIndex = rand() % actions.size();
 
-	return randIndex
+	return randIndex;
+}
+
+int DeepQalgorithm::getMaxAction(vector<double> actions) {
+	int index = 0;
+	double action = actions[0];
+	for (int i = 0; i < actions.size(); i++) {
+		if (actions[i] > action) {
+			action = actions[i];
+			index = i;
+		}
+	}
+
+
+	return index;
+}
+
+
+void DeepQalgorithm::randomBoxPlayer(vector<double> stateNums) {
+	//Come back to this later, this code is far from complete, just need it to get our replay buffer filler looking good.
+
+	vector<double> actionProbs = qNetwork->predictQActions(stateNums);
+	int actionChoice = getRandAction(actionProbs);
+
+	int row = board->getRow(actionChoice);
+	int col = board->getCol(actionChoice);
+
+	board->setSquare(row, col, TicTacToeBoard::SQUARE_OCCUPANT::O);
+
+
+}
+
+void DeepQalgorithm::trainNetworks() {
+
+	for (int j = 0; j < 3; j++) {
+		vector<ExReplay> sampleBatch;
+
+		for (int i = 0; i < batch; i++) {
+			int randIndex = rand() % ExReplayBuffer.size();
+			sampleBatch.push_back(ExReplayBuffer[randIndex]);
+		}
+
+
+		for (int i = 0; i < sampleBatch.size(); i++) {
+			TicTacToeBoard trainingBoard(sampleBatch[i].startState);
+
+			vector<double> stateNums;
+			vector<double> futureStateNums;
+			double highestTargetValue;
+			//Again, will somehow convert the state to a series of doubles
+
+			vector<double> actionProbs = qNetwork->predictQActions(stateNums);
+
+			double choice = actionProbs[sampleBatch[i].action];
+
+			//Then, we assign futureStateNums here to represent our newState
+
+			vector<double> futureActionProbs = tNetwork->predictQActions(futureStateNums);
+			highestTargetValue = futureActionProbs[0];
+			for (double num : futureActionProbs) {
+				if (num > highestTargetValue) {
+					highestTargetValue = num;
+				}
+			}
+
+			highestTargetValue += sampleBatch[i].reward;
+
+
+			double error = calculateMeanError(choice, highestTargetValue);
+
+			backPropogate(error);
+
+
+		}
+	}
+
+	tNetwork = qNetwork;
+	
+}
+
+void DeepQalgorithm::playGame() {
+
 }

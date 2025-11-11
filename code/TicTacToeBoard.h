@@ -36,6 +36,10 @@ public:
     void setSquare(int row, int col, SQUARE_OCCUPANT xOrO);
     SQUARE_OCCUPANT getSquare(int row, int col);
 
+    int getRow(int actionIndex);
+    int getCol(int actionIndex);
+    void resetBoard();
+
     PLAYER_TURN getPlayerTurn();
     BOARD_STATE getBoardState();
 
