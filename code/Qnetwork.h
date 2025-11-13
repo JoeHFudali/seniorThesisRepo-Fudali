@@ -13,9 +13,16 @@ public:
 	Qnetwork(vector<int>& architecture, double learningRate, vector<vector<double>>& trainingData, vector<vector<double>>& labelData);
 	~Qnetwork();
 
+	void backPropogate(double error);
+
 	vector<double> predictQActions(vector<double>& input);
 
 private:
+	Layer* firstLayer;
+	double learningRate;
+	int numberOfTrainingIterations;
+
+	//void train(vector<vector<double>>& trainingData, vector<vector<double>>& labelData);
 
 
 };

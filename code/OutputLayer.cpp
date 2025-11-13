@@ -17,5 +17,7 @@ void OutputLayer::feedForward(vector<double>& layerInputs, vector<double>& netwo
         errors.push_back(networkOutputs[i] - neuronOutputs[i]);
     }
 
-    backPropagate(errors);
+    
+
+    //backPropagate(errors);
 }

@@ -6,6 +6,21 @@ Qnetwork::Qnetwork(vector<int>& architecture, double learningRate, vector<vector
 	
 }
 
+Qnetwork::~Qnetwork() {
+    Layer* currentLayer = firstLayer;
+
+    while (currentLayer != NULL) {
+        Layer* deletePointer = currentLayer;
+        currentLayer = currentLayer->getNextLayer();
+        delete deletePointer;
+        //deletePointer = 0 ?????
+    }
+}
+
 vector<double> Qnetwork::predictQActions(vector<double>& input) {
 	return predict(input);
+}
+
+void Qnetwork::backPropogate(double error) {
+    //Go to the output layer and selectivly update the network until we can't go back anymore.
 }
