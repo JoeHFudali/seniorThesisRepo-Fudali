@@ -42,14 +42,12 @@ DeepQalgorithm::DeepQalgorithm(double learningRate, double discount, double gree
 DeepQalgorithm::~DeepQalgorithm() {
 	delete board;
 	board = 0;
-}
 
-double DeepQalgorithm::calculateMeanError(double qValue, double tValue) {
+	delete qNetwork;
+	qNetwork = 0;
 
-}
-
-void DeepQalgorithm::backPropogate(double error) {
-
+	delete tNetwork;
+	tNetwork = 0;
 }
 
 vector<DeepQalgorithm::ExReplay> DeepQalgorithm::sampleExperiences(int batchSize) {
@@ -67,10 +65,12 @@ void DeepQalgorithm::collectData() {
 	//Very crude implementation for our collection function that fills our Experience Replay Buffer, will fix after some consultation with the professor
 	for (int i = 0; i < ExReplayBuffer.size(); i++) {
 		double reward = 0.0;
+
 		string boardState = board->getBoardString();
-		vector<double> stateNums;
+		vector<double> stateNums = convertStringToNeuronInput(boardState);
+
 		string newBoardString;
-		//I will set state nums to be equal to certain values that can be inputed into our predict function
+		
 
 		random_device rd;
 		mt19937 gen(rd());
@@ -118,12 +118,12 @@ void DeepQalgorithm::collectData() {
 
 
 
-		//stateNums = some new thing based on our new string newBoardString
+		stateNums = convertStringToNeuronInput(newBoardString);
 		boardState = newBoardString;
 
 		randomBoxPlayer(stateNums);
 		
-		newBoardString = board->getBoardString();
+		//newBoardString = board->getBoardString();
 
 		if (board->getBoardState() != TicTacToeBoard::BOARD_STATE::INCOMPLETE_GAME) {
 			board->resetBoard();
@@ -186,13 +186,15 @@ void DeepQalgorithm::trainNetworks() {
 			vector<double> stateNums;
 			vector<double> futureStateNums;
 			double highestTargetValue;
-			//Again, will somehow convert the state to a series of doubles
+
+			stateNums = convertStringToNeuronInput(sampleBatch[i].startState);
 
 			vector<double> actionProbs = qNetwork->predictQActions(stateNums);
 
+
 			double choice = actionProbs[sampleBatch[i].action];
 
-			//Then, we assign futureStateNums here to represent our newState
+			futureStateNums = convertStringToNeuronInput(sampleBatch[i].newState);
 
 			vector<double> futureActionProbs = tNetwork->predictQActions(futureStateNums);
 			highestTargetValue = futureActionProbs[0];
@@ -202,12 +204,13 @@ void DeepQalgorithm::trainNetworks() {
 				}
 			}
 
+			highestTargetValue *= gamma;
 			highestTargetValue += sampleBatch[i].reward;
 
 
-			double error = calculateMeanError(choice, highestTargetValue);
+			double error = (highestTargetValue - choice) * (highestTargetValue - choice);
 
-			backPropogate(error);
+			//backPropogate(error);
 
 
 		}
@@ -216,6 +219,25 @@ void DeepQalgorithm::trainNetworks() {
 	tNetwork = qNetwork;
 	
 }
+
+vector<double> DeepQalgorithm::convertStringToNeuronInput(string boardString) {
+	vector<double> retVals;
+
+	for (char occupant : boardString) {
+		if(occupant == 'X') {
+			retVals.push_back(1.0);
+		}
+		else if (occupant == 'O') {
+			retVals.push_back(-1.0);
+		}
+		else {
+			retVals.push_back(0.0);
+		}
+	}
+
+	return retVals;
+}
+
 
 void DeepQalgorithm::playGame() {
 

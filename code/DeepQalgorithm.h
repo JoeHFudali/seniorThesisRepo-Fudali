@@ -14,10 +14,9 @@ public:
 	~DeepQalgorithm();
 
 	void trainNetworks();
-	double calculateMeanError(double qValue, double tValue);
-	void backPropogate(double error);
-	
 	void collectData();
+
+	vector<double> convertStringToNeuronInput(string boardString);
 
 	void playGame();
 
