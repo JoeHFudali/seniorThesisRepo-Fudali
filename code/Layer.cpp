@@ -49,7 +49,55 @@ void Layer::moveFroward(vector<double>& layerInputs, vector<double>& predicatedO
 
 }
 
+void Layer::moveForwardQ(vector<double>& layerInputs, vector<double>& predictedOutputs, double error, int action) {
+    vector<double> neuronOutputs;
+
+    for (int neuronIndex = 0; neuronIndex < Neurons.size(); neuronIndex++) {
+        Neurons[neuronIndex].activate(layerInputs);
+        neuronOutputs.push_back(Neurons[neuronIndex].getActivationValue());
+    }
+
+    if (getNextLayer() != NULL) {
+        getNextLayer()->moveFroward(neuronOutputs, predictedOutputs);
+    }
+    else {
+        prepareBackPropogation(error, action);
+    }
+}
+
+void Layer::prepareBackPropogation(double error, int action) {
+    Neuron* n = getNeuron(action);
+
+    vector<double> newErrors(n->getWeights().size() - 1);
+    for (int i = 0; i < newErrors.size(); i++) {
+        newErrors[i] = 0.0;
+    }
+
+    vector<double> inputs = getLayerInputs();
+    inputs.insert(inputs.begin(), 1.0);
+
+    vector<double> newWeights = n->getWeights();
+
+    for (int weightIndex = 1; weightIndex < newWeights.size(); weightIndex++) {
+        newErrors[weightIndex - 1] += (error * newWeights[weightIndex]);
+
+    }
+
+
+    for (int weightIndex = 0; weightIndex < newWeights.size(); weightIndex++) {
+        newWeights[weightIndex] = newWeights[weightIndex] + (getLearningRate() * error * inputs[weightIndex]);
+
+    }
+
+    n->setWeights(newWeights);
+    getPreviousLayer()->backPropagate(newErrors);
+}
+
+
 void Layer::backPropagate(vector<double>& errors) {
+
+    
+
     vector<double> newErrors(getLayerInputs().size());
     for(int i = 0; i < getLayerInputs().size(); i++) {
         newErrors[i] = 0.0;
@@ -120,4 +168,9 @@ double Layer::getLearningRate() {
 
 void Layer::setLearningRate(double lr) {
     learningRate = lr;
+}
+
+Neuron* Layer::getNeuron(int index) {
+    Neuron* ptr = &Neurons[index];
+    return ptr;
 }

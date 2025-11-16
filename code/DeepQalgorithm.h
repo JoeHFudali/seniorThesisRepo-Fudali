@@ -10,7 +10,7 @@ class DeepQalgorithm {
 public:
 
 	DeepQalgorithm();
-	DeepQalgorithm(double lr, double discount, double greedy, int bufferSize, int batchSize);
+	DeepQalgorithm(double lr, double discount, double greedy, int bufferSize, int batchSize, int numEpisodes);
 	~DeepQalgorithm();
 
 	void trainNetworks();
@@ -18,7 +18,7 @@ public:
 
 	vector<double> convertStringToNeuronInput(string boardString);
 
-	void playGame();
+	void playGame(string startBoard);
 
 private:
 

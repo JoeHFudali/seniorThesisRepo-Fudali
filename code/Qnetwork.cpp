@@ -1,9 +1,29 @@
 #include "Qnetwork.h"
+#include <iostream>
+#include "Neuron.h"
+#include "InputLayer.h"
+#include "HiddenLayer.h"
+#include "OutputLayer.h"
+
 
 using namespace std;
 
-Qnetwork::Qnetwork(vector<int>& architecture, double learningRate, vector<vector<double>>& trainingData, vector<vector<double>>& labelData) : Neural_Network(architecture, trainingData, labelData, learningRate, 0, false) {
-	
+Qnetwork::Qnetwork(vector<int>& architecture, double lr, int nti) {
+    numberOfTrainingIterations = nti;
+
+    Layer::setLearningRate(lr);
+
+    Layer* currentLayer = new InputLayer(architecture[0]);
+    firstLayer = currentLayer;
+
+    for (int i = 1; i < architecture.size() - 1; i++) {
+        Layer* nextLayer = new HiddenLayer(architecture[i - 1], architecture[i]);
+        currentLayer->setNextLayer(nextLayer);
+        currentLayer = nextLayer;
+    }
+
+    currentLayer->setNextLayer(new OutputLayer(architecture[architecture.size() - 2], architecture[architecture.size() - 1]));
+
 }
 
 Qnetwork::~Qnetwork() {
@@ -17,10 +37,33 @@ Qnetwork::~Qnetwork() {
     }
 }
 
-vector<double> Qnetwork::predictQActions(vector<double>& input) {
-	return predict(input);
+void Qnetwork::copyNetwork(Qnetwork* networkToCopyFrom) {
+    Layer* currentOutsideLayer = networkToCopyFrom->firstLayer;
+    Layer* currentLayer = firstLayer;
+
+    while (currentOutsideLayer != NULL) {
+        Layer layerInfo = *currentLayer;
+        *currentLayer = layerInfo;
+
+        currentLayer = currentLayer->getNextLayer();
+        currentOutsideLayer = currentOutsideLayer->getNextLayer();
+    }
 }
 
-void Qnetwork::backPropogate(double error) {
+vector<double> Qnetwork::predictQActions(vector<double>& input) {
+    vector<double> results;
+    firstLayer->getNextLayer()->moveFroward(input, results);
+    return results;
+}
+
+void Qnetwork::adjustNetwork(double error, int action, vector<double> state) {
+    vector<double> results;
+    firstLayer->getNextLayer()->moveForwardQ(state, results, error, action);
+    
+
     //Go to the output layer and selectivly update the network until we can't go back anymore.
+}
+
+int Qnetwork::getTrainingIterations() {
+    return numberOfTrainingIterations;
 }

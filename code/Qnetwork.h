@@ -1,5 +1,5 @@
 #pragma once
-#include "Neural_Network.h"
+#include "Layer.h"
 
 using namespace std;
 
@@ -7,22 +7,25 @@ using namespace std;
 //What I do need to change is when the network begins to train (in conjunction with my DeepQalgorithm class), and how the back propogation works (since we
 //are utilizng an unsupervised ML example).
 
-class Qnetwork : Neural_Network {
+//ANSWER - just copy the NN code and edit some of it (training to not have labels, back propogation somehow converted, etc.)
+
+class Qnetwork {
 public:
 
-	Qnetwork(vector<int>& architecture, double learningRate, vector<vector<double>>& trainingData, vector<vector<double>>& labelData);
+	Qnetwork(vector<int>& architecture, double lr, int nti);
 	~Qnetwork();
 
-	void backPropogate(double error);
+	void copyNetwork(Qnetwork* networkToCopyFrom);
+
+	void adjustNetwork(double error, int action, vector<double> state);
 
 	vector<double> predictQActions(vector<double>& input);
+
+	int getTrainingIterations();
 
 private:
 	Layer* firstLayer;
 	double learningRate;
 	int numberOfTrainingIterations;
-
-	//void train(vector<vector<double>>& trainingData, vector<vector<double>>& labelData);
-
 
 };

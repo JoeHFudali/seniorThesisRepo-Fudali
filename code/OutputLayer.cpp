@@ -19,5 +19,6 @@ void OutputLayer::feedForward(vector<double>& layerInputs, vector<double>& netwo
 
     
 
+
     //backPropagate(errors);
 }

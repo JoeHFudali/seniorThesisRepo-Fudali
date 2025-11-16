@@ -208,8 +208,6 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
                 cin >> playerCol;
             }
 
-            int choice = playerRow * 3 + playerCol;
-
             cout << "Playing X at row " << playerRow << " and column " << playerCol << endl;
 
             board.setSquare(playerRow, playerCol, player);
@@ -233,9 +231,6 @@ void Qalgorithm::playGame(TicTacToeBoard::SQUARE_OCCUPANT player) {
                 cout << "Enter in O's col: ";
                 cin >> playerCol;
             }
-
-            int choice = playerRow * 3 + playerCol;
-            int index = 0;
 
             cout << "Playing O at row " << playerRow << " and column " << playerCol << endl;
 

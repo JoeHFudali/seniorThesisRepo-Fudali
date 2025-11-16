@@ -19,7 +19,7 @@ int main()
 {
     srand(time(0));
 
-    set<string> uniqueBoardStrings;
+    /*set<string> uniqueBoardStrings;
     createBoardStrings(uniqueBoardStrings);
     int episodes = 1000000;
 
@@ -44,7 +44,17 @@ int main()
         cin.get();
     }
 
-    al.getQtable()->printTable();
+    al.getQtable()->printTable();*/
+
+    string startingBoard = "---------";
+
+    DeepQalgorithm DQN(0.1, 0.9, 0.5, 50000, 9, 10000);
+    
+    DQN.collectData();
+    cout << "works" << endl;
+    DQN.trainNetworks();
+
+    DQN.playGame(startingBoard);
 
     return 0;
 }

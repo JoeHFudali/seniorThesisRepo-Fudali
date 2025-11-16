@@ -11,7 +11,9 @@ public:
 
     virtual void feedForward(vector<double>& layerInputs, vector<double>& networkOutputs);
     virtual void backPropagate(vector<double>& errors);
+    void prepareBackPropogation(double error, int action);
     void moveFroward(vector<double>& layerInputs, vector<double>& predictedOutputs);
+    void moveForwardQ(vector<double>& layerInputs, vector<double>& predictedOutputs, double error, int action);
 
     void setNextLayer(Layer* nl);
     Layer* getNextLayer();
@@ -25,6 +27,8 @@ public:
 
     static double getLearningRate();
     static void setLearningRate(double lr);
+
+    Neuron* getNeuron(int index);
     
 private:
 
