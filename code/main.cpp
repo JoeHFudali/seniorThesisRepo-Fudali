@@ -48,10 +48,10 @@ int main()
 
     string startingBoard = "---------";
 
-    DeepQalgorithm DQN(0.1, 0.9, 0.5, 50000, 9, 10000);
+    DeepQalgorithm DQN(0.1, 0.9, 0.5, 50000, 8, 10000, {9, 6, 6, 9});
     
     DQN.collectData();
-    cout << "works" << endl;
+    //cout << "works" << endl;
     DQN.trainNetworks();
 
     DQN.playGame(startingBoard);

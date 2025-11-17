@@ -10,7 +10,7 @@ class DeepQalgorithm {
 public:
 
 	DeepQalgorithm();
-	DeepQalgorithm(double lr, double discount, double greedy, int bufferSize, int batchSize, int numEpisodes);
+	DeepQalgorithm(double lr, double discount, double greedy, int bufferSize, int batchSize, int numEpisodes, vector<int> architecture);
 	~DeepQalgorithm();
 
 	void trainNetworks();
@@ -30,10 +30,11 @@ private:
 	};
 
 	vector<ExReplay> sampleExperiences(int batchSize);
-	int getRandAction(vector<double> actions);
+	int getRandAction(string state);
 	int getMaxAction(vector<double> actions);
+	double getNextStateMaxAction(vector<double> actions, TicTacToeBoard b);
 
-	void randomBoxPlayer(vector<double> stateNums);
+	void randomBoxPlayer(string state);
 
 	vector<ExReplay> ExReplayBuffer;
 	Qnetwork* qNetwork;
