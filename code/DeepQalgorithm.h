@@ -29,12 +29,14 @@ private:
 		string newState;
 	};
 
-	vector<ExReplay> sampleExperiences(int batchSize);
+	vector<ExReplay> sampleExperiences();
 	int getRandAction(string state);
 	int getMaxAction(vector<double> actions);
-	double getNextStateMaxAction(vector<double> actions, TicTacToeBoard b);
+	double getNextStateMaxAction(vector<double> actions);
 
 	void randomBoxPlayer(string state);
+
+	void adjustInvalidOutputs(vector<double>& probs, TicTacToeBoard b);
 
 	vector<ExReplay> ExReplayBuffer;
 	Qnetwork* qNetwork;
@@ -46,6 +48,7 @@ private:
 	double alpha;
 	double gamma;
 
+	int buffer;
 	int batch;
 
 	TicTacToeBoard* board;

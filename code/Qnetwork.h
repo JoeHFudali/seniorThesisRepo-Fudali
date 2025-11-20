@@ -24,6 +24,7 @@ public:
 	int getTrainingIterations();
 
 private:
+
 	Layer* firstLayer;
 	double learningRate;
 	int numberOfTrainingIterations;

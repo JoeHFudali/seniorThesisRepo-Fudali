@@ -42,7 +42,7 @@ void Qnetwork::copyNetwork(Qnetwork* networkToCopyFrom) {
     Layer* currentLayer = firstLayer;
 
     while (currentOutsideLayer != NULL) {
-        Layer layerInfo = *currentLayer;
+        Layer layerInfo = *currentOutsideLayer;
         *currentLayer = layerInfo;
 
         currentLayer = currentLayer->getNextLayer();
