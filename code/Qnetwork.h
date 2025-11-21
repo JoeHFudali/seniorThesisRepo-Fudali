@@ -13,6 +13,7 @@ class Qnetwork {
 public:
 
 	Qnetwork(vector<int>& architecture, double lr, int nti);
+	Qnetwork();
 	~Qnetwork();
 
 	void copyNetwork(Qnetwork* networkToCopyFrom);
@@ -25,6 +26,7 @@ public:
 
 private:
 
+	vector<int> generalArchitecture;
 	Layer* firstLayer;
 	double learningRate;
 	int numberOfTrainingIterations;

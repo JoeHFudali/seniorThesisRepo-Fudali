@@ -48,7 +48,7 @@ int main()
 
     string startingBoard = "---------";
 
-    DeepQalgorithm DQN(0.2, 0.9, 0.5, 3000, 8, 15000, {9, 16, 16, 9});
+    DeepQalgorithm DQN(0.000002, 0.9, 0.5, 3000, 8, 25000, {9, 10, 10, 9});
    
     DQN.trainNetworks();
     char yOrN = 'y';
@@ -56,7 +56,7 @@ int main()
     do {
 
         DQN.playGame(startingBoard);
-        cout << "Woul you like to play again?" << endl;
+        cout << "Would you like to play again?" << endl;
         cin >> yOrN;
         cin.get();
 

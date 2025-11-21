@@ -10,25 +10,29 @@ using namespace std;
 
 Qnetwork::Qnetwork(vector<int>& architecture, double lr, int nti) {
     numberOfTrainingIterations = nti;
+    generalArchitecture = architecture;
 
     Layer::setLearningRate(lr);
 
-    Layer* currentLayer = new InputLayer(architecture[0]);
+    Layer* currentLayer = new InputLayer(generalArchitecture[0]);
     firstLayer = currentLayer;
 
-    for (int i = 1; i < architecture.size() - 1; i++) {
-        Layer* nextLayer = new HiddenLayer(architecture[i - 1], architecture[i]);
+    for (int i = 1; i < generalArchitecture.size() - 1; i++) {
+        Layer* nextLayer = new HiddenLayer(generalArchitecture[i - 1], generalArchitecture[i]);
         currentLayer->setNextLayer(nextLayer);
         currentLayer = nextLayer;
     }
 
-    currentLayer->setNextLayer(new OutputLayer(architecture[architecture.size() - 2], architecture[architecture.size() - 1]));
+    currentLayer->setNextLayer(new OutputLayer(generalArchitecture[generalArchitecture.size() - 2], generalArchitecture[generalArchitecture.size() - 1]));
 
+}
+
+Qnetwork::Qnetwork() {
+    //Do nothing, will call constructor later
 }
 
 Qnetwork::~Qnetwork() {
     Layer* currentLayer = firstLayer;
-
     while (currentLayer != NULL) {
         Layer* deletePointer = currentLayer;
         currentLayer = currentLayer->getNextLayer();
@@ -38,16 +42,39 @@ Qnetwork::~Qnetwork() {
 }
 
 void Qnetwork::copyNetwork(Qnetwork* networkToCopyFrom) {
-    Layer* currentOutsideLayer = networkToCopyFrom->firstLayer;
     Layer* currentLayer = firstLayer;
 
-    while (currentOutsideLayer != NULL) {
-        Layer layerInfo = *currentOutsideLayer;
-        *currentLayer = layerInfo;
-
+    while (currentLayer != NULL) {
+        Layer* deletePointer = currentLayer;
         currentLayer = currentLayer->getNextLayer();
-        currentOutsideLayer = currentOutsideLayer->getNextLayer();
+        delete deletePointer;
+        deletePointer = 0;
     }
+
+    currentLayer = new InputLayer(generalArchitecture[0]);
+    firstLayer = currentLayer;
+
+    for (int i = 1; i < generalArchitecture.size() - 1; i++) {
+        Layer* nextLayer = new HiddenLayer(generalArchitecture[i - 1], generalArchitecture[i]);
+        currentLayer->setNextLayer(nextLayer);
+        currentLayer = nextLayer;
+    }
+
+    currentLayer->setNextLayer(new OutputLayer(generalArchitecture[generalArchitecture.size() - 2], generalArchitecture[generalArchitecture.size() - 1]));
+
+
+    Layer* currentOutsideLayer = networkToCopyFrom->firstLayer->getNextLayer();
+    currentLayer = firstLayer->getNextLayer();
+    
+    while (currentLayer != NULL) {
+        for (int j = 0; j < currentLayer->getNumberNeurons(); j++) {
+            const vector<double> newWeights = currentOutsideLayer->getNeuron(j).getWeights();
+            currentLayer->setNeuronWeights(j, newWeights);
+        }
+        currentOutsideLayer = currentOutsideLayer->getNextLayer();
+        currentLayer = currentLayer->getNextLayer();
+    }
+
 }
 
 vector<double> Qnetwork::predictQActions(vector<double>& input) {

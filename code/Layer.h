@@ -28,7 +28,9 @@ public:
     static double getLearningRate();
     static void setLearningRate(double lr);
 
-    Neuron* getNeuron(int index);
+    Neuron getNeuron(int index);
+    void setNeuronWeights(int index, vector<double> value);
+    int getNumberNeurons();
     
 private:
 

@@ -15,6 +15,7 @@ public:
 
 	void trainNetworks();
 	void collectData();
+	//void createIncorrectData();
 
 	vector<double> convertStringToNeuronInput(string boardString);
 

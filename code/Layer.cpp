@@ -52,13 +52,17 @@ void Layer::moveFroward(vector<double>& layerInputs, vector<double>& predicatedO
 void Layer::moveForwardQ(vector<double>& layerInputs, vector<double>& predictedOutputs, double error, int action) {
     vector<double> neuronOutputs;
 
+    setLayerInputs(layerInputs);
+
     for (int neuronIndex = 0; neuronIndex < Neurons.size(); neuronIndex++) {
         Neurons[neuronIndex].activate(layerInputs);
         neuronOutputs.push_back(Neurons[neuronIndex].getActivationValue());
     }
+    setLayerOutputs(neuronOutputs);
 
     if (getNextLayer() != NULL) {
-        getNextLayer()->moveFroward(neuronOutputs, predictedOutputs);
+
+        getNextLayer()->moveForwardQ(neuronOutputs, predictedOutputs, error, action);
     }
     else {
         prepareBackPropogation(error, action);
@@ -66,9 +70,8 @@ void Layer::moveForwardQ(vector<double>& layerInputs, vector<double>& predictedO
 }
 
 void Layer::prepareBackPropogation(double error, int action) {
-    Neuron* n = getNeuron(action);
 
-    vector<double> newErrors(n->getWeights().size() - 1);
+    vector<double> newErrors(Neurons[action].getWeights().size() - 1);
     for (int i = 0; i < newErrors.size(); i++) {
         newErrors[i] = 0.0;
     }
@@ -76,7 +79,7 @@ void Layer::prepareBackPropogation(double error, int action) {
     vector<double> inputs = getLayerInputs();
     inputs.insert(inputs.begin(), 1.0);
 
-    vector<double> newWeights = n->getWeights();
+    vector<double> newWeights = Neurons[action].getWeights();
 
     for (int weightIndex = 1; weightIndex < newWeights.size(); weightIndex++) {
         newErrors[weightIndex - 1] += (error * newWeights[weightIndex]);
@@ -89,7 +92,7 @@ void Layer::prepareBackPropogation(double error, int action) {
 
     }
 
-    n->setWeights(newWeights);
+    Neurons[action].setWeights(newWeights);
     getPreviousLayer()->backPropagate(newErrors);
 }
 
@@ -170,7 +173,15 @@ void Layer::setLearningRate(double lr) {
     learningRate = lr;
 }
 
-Neuron* Layer::getNeuron(int index) {
-    Neuron* ptr = &Neurons[index];
-    return ptr;
+Neuron Layer::getNeuron(int index) {
+    return Neurons[index];
 }
+
+void Layer::setNeuronWeights(int index, vector<double> value) {
+    Neurons[index].setWeights(value);
+}
+
+int Layer::getNumberNeurons() {
+    return Neurons.size();
+}
+

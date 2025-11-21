@@ -66,8 +66,6 @@ vector<DeepQalgorithm::ExReplay> DeepQalgorithm::sampleExperiences() {
 			retVals.push_back(ExReplayBuffer[randIndex]);
 		}
 	}
-	
-
 	return retVals;
 }
 
@@ -77,7 +75,7 @@ void DeepQalgorithm::collectData() {
 		ExReplayBuffer.erase(ExReplayBuffer.begin());
 	}
 
-	double reward = 0.0;
+	double reward =	1.0;
 
 	string boardState = board->getBoardString();
 	vector<double> stateNums = convertStringToNeuronInput(boardState);
@@ -97,7 +95,7 @@ void DeepQalgorithm::collectData() {
 	int currentAction;
 
 	vector<double> actionProbs = qNetwork->predictQActions(stateNums);
-	adjustInvalidOutputs(actionProbs, *board);
+	//adjustInvalidOutputs(actionProbs, *board);
 
 
 
@@ -165,6 +163,8 @@ void DeepQalgorithm::collectData() {
 
 }
 
+
+
 int DeepQalgorithm::getRandAction(string state) {
 	vector<int> choices;
 
@@ -182,8 +182,11 @@ int DeepQalgorithm::getRandAction(string state) {
 
 int DeepQalgorithm::getMaxAction(vector<double> actions) {
 	int index = 0;
+	//int row, col;
 	double action = double(INT_MIN);
 	for (int i = 0; i < actions.size(); i++) {
+		//row = b.getRow(i);
+		//col = b.getCol(i);
 		if (actions[i] > action) {
 			action = actions[i];
 			index = i;
@@ -212,7 +215,7 @@ void DeepQalgorithm::adjustInvalidOutputs(vector<double>& probs, TicTacToeBoard 
 		row = b.getRow(i);
 		col = b.getCol(i);
 		if (b.getSquare(row, col) != TicTacToeBoard::SQUARE_OCCUPANT::EMPTY) {
-			probs[i] *= -1000.0;
+			probs[i] *= double(INT_MIN);
 		}
 	}
 
@@ -235,7 +238,7 @@ void DeepQalgorithm::randomBoxPlayer(string state) {
 void DeepQalgorithm::trainNetworks() {
 
 	for (int m = 0; m < qNetwork->getTrainingIterations(); m++) {
-		cout << m << endl;
+		//cout << m << endl;
 
 		collectData();
 
@@ -253,17 +256,18 @@ void DeepQalgorithm::trainNetworks() {
 			stateNums = convertStringToNeuronInput(sampleBatch[i].startState);
 
 			vector<double> actionProbs = qNetwork->predictQActions(stateNums);
-			adjustInvalidOutputs(actionProbs, trainingBoard);
+			//adjustInvalidOutputs(actionProbs, trainingBoard);
 
 
 			double choice = actionProbs[sampleBatch[i].action];
 
 			futureStateNums = convertStringToNeuronInput(sampleBatch[i].newState);
 
-			trainingBoard.setSquare(trainingBoard.getRow(sampleBatch[i].action), trainingBoard.getCol(sampleBatch[i].action), TicTacToeBoard::SQUARE_OCCUPANT::X);
+			TicTacToeBoard futureTBoard(trainingBoard.getBoardString());
+			futureTBoard.setSquare(trainingBoard.getRow(sampleBatch[i].action), trainingBoard.getCol(sampleBatch[i].action), TicTacToeBoard::SQUARE_OCCUPANT::X);
 
 			vector<double> futureActionProbs = tNetwork->predictQActions(futureStateNums);
-			adjustInvalidOutputs(futureActionProbs, trainingBoard);
+			//adjustInvalidOutputs(futureActionProbs, futureTBoard);
 
 			
 			if (trainingBoard.getBoardState() != TicTacToeBoard::BOARD_STATE::INCOMPLETE_GAME) {
@@ -281,12 +285,47 @@ void DeepQalgorithm::trainNetworks() {
 
 			double error = (highestTargetValue - choice) * (highestTargetValue - choice);
 
+			
+
 			qNetwork->adjustNetwork(error, sampleBatch[i].action, stateNums);
 
+			
+
+			//Come back here to experiment with sending back big errors for invalid moves, and also continue with the masking we are doing with out adjustInvalidOuputs function
+			
 		}
 
-		if (m % 1000 == 0) {
+		if (m % 100 == 0 && m != 0) {
+
+			/*cout << "Before copy" << endl << endl;
+			vector<double> inputs = convertStringToNeuronInput(ExReplayBuffer[0].startState);
+			vector<double> results = qNetwork->predictQActions(inputs);
+			vector<double> cResults = tNetwork->predictQActions(inputs);
+			for (int n = 0; n < results.size(); n++) {
+				cout << results[n] << " ";
+			}
+			cout << endl;
+			for (int n = 0; n < cResults.size(); n++) {
+				cout << cResults[n] << " ";
+			}
+			cout << endl;*/
+			
 			tNetwork->copyNetwork(qNetwork);
+			
+			
+			/*cout << "After copy" << endl << endl;
+			vector<double> Afterinputs = convertStringToNeuronInput(ExReplayBuffer[0].startState);
+			results = qNetwork->predictQActions(Afterinputs);
+			cResults = tNetwork->predictQActions(Afterinputs);
+			for (int n = 0; n < results.size(); n++) {
+				cout << results[n] << " ";
+			}
+			cout << endl;
+			for (int n = 0; n < cResults.size(); n++) {
+				cout << cResults[n] << " ";
+			}
+			cout << endl;*/
+			
 		}
 	}
 	
@@ -300,7 +339,7 @@ vector<double> DeepQalgorithm::convertStringToNeuronInput(string boardString) {
 			retVals.push_back(-1.0);
 		}
 		else {
-			retVals.push_back(1.0);
+			retVals.push_back(0.0);
 		}
 	}
 
@@ -326,18 +365,19 @@ void DeepQalgorithm::playGame(string startBoard) {
 
 		cout << "X's turn" << endl << endl;
 		vector<double> currentBoardState = convertStringToNeuronInput(pBoard.getBoardString());
-
-		for (double num : qNetwork->predictQActions(currentBoardState)) {
+		vector<double> results = qNetwork->predictQActions(currentBoardState);
+		adjustInvalidOutputs(results, pBoard);
+		for (double num : results) {
 			cout << num << " ";
 		}
 		cout << endl;
 
 		for (double num : tempNetwork.predictQActions(currentBoardState)) {
 			cout << num << " ";
-		}
+		}			
 		cout << endl;
 
-		int action = getMaxAction(qNetwork->predictQActions(currentBoardState));
+		int action = getMaxAction(results);
 
 		agentRow = pBoard.getRow(action);
 		agentCol = pBoard.getCol(action);
