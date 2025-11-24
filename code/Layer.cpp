@@ -69,6 +69,26 @@ void Layer::moveForwardQ(vector<double>& layerInputs, vector<double>& predictedO
     }
 }
 
+void Layer::moveForwardQ(vector<double>& layerInputs, vector<double>& predictedOutputs, vector<double> errors, int action) {
+    vector<double> neuronOutputs;
+
+    setLayerInputs(layerInputs);
+
+    for (int neuronIndex = 0; neuronIndex < Neurons.size(); neuronIndex++) {
+        Neurons[neuronIndex].activate(layerInputs);
+        neuronOutputs.push_back(Neurons[neuronIndex].getActivationValue());
+    }
+    setLayerOutputs(neuronOutputs);
+
+    if (getNextLayer() != NULL) {
+
+        getNextLayer()->moveForwardQ(neuronOutputs, predictedOutputs, errors, action);
+    }
+    else {
+        backPropagate(errors);
+    }
+}
+
 void Layer::prepareBackPropogation(double error, int action) {
 
     vector<double> newErrors(Neurons[action].getWeights().size() - 1);

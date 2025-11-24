@@ -19,6 +19,7 @@ public:
 	void copyNetwork(Qnetwork* networkToCopyFrom);
 
 	void adjustNetwork(double error, int action, vector<double> state);
+	void adjustWholeNetwork(vector<double> errors, int action, vector<double> state);
 
 	vector<double> predictQActions(vector<double>& input);
 

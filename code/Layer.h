@@ -15,6 +15,8 @@ public:
     void moveFroward(vector<double>& layerInputs, vector<double>& predictedOutputs);
     void moveForwardQ(vector<double>& layerInputs, vector<double>& predictedOutputs, double error, int action);
 
+    void moveForwardQ(vector<double>& layerInputs, vector<double>& predictedOutputs, vector<double> errors, int action);
+
     void setNextLayer(Layer* nl);
     Layer* getNextLayer();
     void setPreviousLayer(Layer* pl);

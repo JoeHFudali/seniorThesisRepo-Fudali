@@ -91,6 +91,11 @@ void Qnetwork::adjustNetwork(double error, int action, vector<double> state) {
     //Go to the output layer and selectivly update the network until we can't go back anymore.
 }
 
+void Qnetwork::adjustWholeNetwork(vector<double> errors, int action, vector<double> state) {
+    vector<double> results;
+    firstLayer->getNextLayer()->moveForwardQ(state, results, errors, action);
+}
+
 int Qnetwork::getTrainingIterations() {
     return numberOfTrainingIterations;
 }

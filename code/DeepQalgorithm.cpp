@@ -285,13 +285,32 @@ void DeepQalgorithm::trainNetworks() {
 
 			double error = (highestTargetValue - choice) * (highestTargetValue - choice);
 
+			vector<double> errors;
+
+			for (int n = 0; n < actionProbs.size(); n++) {
+				int row = trainingBoard.getRow(n);
+				int col = trainingBoard.getCol(n);
+				if (n == sampleBatch[i].action) {
+					errors.push_back(error);
+				}
+				else if (trainingBoard.getSquare(row, col) != TicTacToeBoard::SQUARE_OCCUPANT::EMPTY) {
+					errors.push_back(10.0);
+				}
+				else {
+					errors.push_back(0.0);
+				}
+
+			}
+
+			qNetwork->adjustWholeNetwork(errors, sampleBatch[i].action, stateNums);
+
 			
 
-			qNetwork->adjustNetwork(error, sampleBatch[i].action, stateNums);
+			//qNetwork->adjustNetwork(error, sampleBatch[i].action, stateNums);
 
 			
 
-			//Come back here to experiment with sending back big errors for invalid moves, and also continue with the masking we are doing with out adjustInvalidOuputs function
+			//Come back here to experiment with sending back big errors for invalid moves, and also continue with the masking we are doing with our adjustInvalidOuputs function
 			
 		}
 
@@ -366,7 +385,7 @@ void DeepQalgorithm::playGame(string startBoard) {
 		cout << "X's turn" << endl << endl;
 		vector<double> currentBoardState = convertStringToNeuronInput(pBoard.getBoardString());
 		vector<double> results = qNetwork->predictQActions(currentBoardState);
-		adjustInvalidOutputs(results, pBoard);
+		//adjustInvalidOutputs(results, pBoard);
 		for (double num : results) {
 			cout << num << " ";
 		}
