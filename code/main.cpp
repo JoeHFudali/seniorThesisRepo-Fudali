@@ -48,7 +48,7 @@ int main()
 
     string startingBoard = "---------";
 
-    DeepQalgorithm DQN(0.000002, 0.9, 0.5, 3000, 8, 25000, {9, 10, 10, 9});
+    DeepQalgorithm DQN(0.00000002, 0.9, 0.7, 2000, 8, 300000, {9, 16, 8, 9});
    
     DQN.trainNetworks();
     char yOrN = 'y';
