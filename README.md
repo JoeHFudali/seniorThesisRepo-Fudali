@@ -80,7 +80,7 @@ Reinforcement learning is a sub-field in Machine Learning that aims to create a 
   1. Displays error - Not a valid position [if taken - position is already filled, choose a different position] [if non-existent - position is outside of the Tic Tac Toe Board, choose a different position].
   2. Go back to step 2.
 
-### Use Case 1.2: 5 by 5 Tic Tac Toe
+### Use Case 1.2: Deep Q-learning Tic Tac Toe
 - **Actors**: Human Player and Reinforcement Learning Program.
 - **Overview**: The human player plays modified games of Tic Tac Toe (in this case, a 5 by 5 board instead of a 3 by 3 board) against a program that acts optimally.
 
@@ -95,16 +95,3 @@ Reinforcement learning is a sub-field in Machine Learning that aims to create a 
 - **Step 1/2**: User enters coordinates that do not correspong to an existing/open position.
   1. Displays error - Not a valid position [if taken - position is already filled, choose a different position] [if non-existent - position is outside of the Tic Tac Toe Board, choose a different position].
   2. Go back to step 2.
-
-### Use Case 1.3: Atari Game (only if time permits)
-- **Actors**: Reinforcement Learning Program.
-- **Overview**: The Program will learning how to effectively play an Atari game.
-
-**Typical Course of Events**:
-1. Introduce the program to the game with only a base Q-table, and randomly set the weights for the Neural Network.
-2. Have the program train on the game, updating the Q-table and weights for the N.N.
-3. Run the Game at a point where the Q-table/N.N. weights have reached a state where the program has noticably imporved.
-
-**Alternative Courses**:
-- **Step ???**: W.I.P.
-  1. 
