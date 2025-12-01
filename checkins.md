@@ -227,21 +227,21 @@ Trying (at first) to understand how Deep Q Learning works. Looking into the topi
 
 ---
 
-## Week 13 Summary (MM/DD/YYYY)
+## Week 13 Summary (12/01/2025)
 ### This week I worked on:
 
-[Your answer here]
+Testing out the back propagation for all outputs, creating a case where we record a negative experience, but also adjusting and testing the one-error case.
 
 ### This week I learned:
 
-[Your answer here]
+The back propagation for every output does not work too well, but adding in the negative case and tunng down the reward values really improves the agent.
 
 ### My successes this week were:
 
-[Your answer here]
+Getting my agent to play TicTacToe somewhat competently, often able to block my wins. Also testing out and not using the whole-ouput back propagation was useful to help me focus on the case that actually did start working.
 
 ### The challenges I faced this week were:
 
-[Your answer here]
+While my agent can play somewhat competently, it often fails at blocking specific moves, so it is not as powerful as the normal Q-learning agent is.
 
 ---
