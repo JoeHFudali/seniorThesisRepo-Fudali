@@ -75,7 +75,7 @@ void DeepQalgorithm::collectData() {
 		ExReplayBuffer.erase(ExReplayBuffer.begin());
 	}
 
-	double reward =	1.0;
+	double reward =	-0.01;
 
 	string boardState = board->getBoardString();
 	vector<double> stateNums = convertStringToNeuronInput(boardState);
@@ -117,11 +117,11 @@ void DeepQalgorithm::collectData() {
 	if (board->getBoardState() != TicTacToeBoard::BOARD_STATE::INCOMPLETE_GAME) {
 
 		if (board->getBoardState() == TicTacToeBoard::BOARD_STATE::X_WIN) {
-			reward = 10.0;
+			reward = 1.0;
 		}
-		/*else if (board->getBoardState() == TicTacToeBoard::BOARD_STATE::DRAW) {
-			reward = -1.0;
-		}*/
+		else if (board->getBoardState() == TicTacToeBoard::BOARD_STATE::DRAW) {
+			reward = -.1;
+		}
 
 		ExReplay newReplay;
 		newReplay.startState = boardState;
@@ -142,8 +142,6 @@ void DeepQalgorithm::collectData() {
 		newReplay.newState = newBoardString;
 		//cout << newReplay.startState << " " << newReplay.newState << endl;
 
-		ExReplayBuffer.push_back(newReplay);
-
 
 		stateNums = convertStringToNeuronInput(newBoardString);
 		boardState = newBoardString;
@@ -151,9 +149,27 @@ void DeepQalgorithm::collectData() {
 		randomBoxPlayer(boardState);
 
 
+
+
 		if (board->getBoardState() != TicTacToeBoard::BOARD_STATE::INCOMPLETE_GAME) {
+
+			if (board->getBoardState() == TicTacToeBoard::BOARD_STATE::O_WIN) {
+
+				//get low reward to incentivise to not do this 
+				reward = -1.0;
+				newReplay.reward = reward;
+			}
+			
+
 			board->resetBoard();
+
+			ExReplayBuffer.push_back(newReplay);
+			
 		}
+		else {
+			ExReplayBuffer.push_back(newReplay);
+		}
+
 	}
 
 
