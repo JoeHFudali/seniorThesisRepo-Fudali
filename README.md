@@ -1,12 +1,7 @@
-# Senior Thesis Repo: [something with using a Neural Network and Q-learning to play basic games optimally]
+# Senior Thesis Repo: Reinforcement Learning in Tic-Tac-Toe
 This repository is provided to help you build your senior thesis project. You will edit it to store your specification documents, code, and weekly checkins.
 
 First, fork this repo (this makes a copy of it associated with your account) and then clone it to your machine (this makes a copy of your fork on your personal machine). You can then use an editor and a GitHub client to manage the repository.
-
-### Markdown
-This file is called README.md. It is a [Markdown file](https://en.wikipedia.org/wiki/Markdown). Markdown is a simple way to format documents. When a Markdown-ready viewer displays the contents of a file, it formats it to look like HTML. However, Markdown is significantly easier to write than HTML. VSCode supports displaying Markdown in a preview window. GitHub uses Markdown extensively including in every repo's description file, ```README.md```.
-
-All Markdown files end with the extension ```.md```. There is a Markdown tutorial [here](https://www.markdowntutorial.com/) and a Markdown cheatsheet [here](https://www.markdownguide.org/cheat-sheet/).
 
 #### Images
 If you would like to add images to a Markdown file, place them in the ```docs/images/``` directory in this repo and reference them using markdown like this:
@@ -40,58 +35,113 @@ Below is an example of a project specification.
 ## Introduction
 
 ### Purpose
-The purpose of this document is to outline the methods and concepts used to create a program that can play basic games, from Tic Tac Toe up to ones on the Atari. This includes Q-learning/Q tables, a method of training a program to take the best actions that result in the highest rewards. I will also be utilizing a Neural Network to futher the Q-learning program into a deep Q-learning program, in order to further imporve the program's "game playing" ability. [add more later]
+The purpose of this document is to outline the methods and concepts used to create a program that can learn to play the game Tic-Tac-Toe. This includes Q-learning, a method of training a program to take the best actions that result in the highest rewards. I will also be utilizing a Neural Network to change our algorithm into a Deep Q-learning method. 
 
 The key goals of the program are:
-- To properly utilize Neural Networks
-- To properly utilize Q-learning
-- To connect both of the concepts above
-- To use this program to play basic games
-- W.I.P.
+- To properly utilize Q-learning to play Tic-Tac-Toe
+- To properly utilize Neural Networks in Deep Q-learning to play Tic-Tac-Toe
+- To give me experience in the Machine Learning area of Reinforcement Learning
 
 ### Scope
 This program is intended to learn how to play simple games through deep Q-learning/reinforcement learning. The system will handle:
-- Base Tic Tac Toe.
-- 5 by 5 Tic Tac Toe.
-- Possibly Atari games.
+- Playing games of Tic-Tac-Toe with Q-learning or Deep Q-learning
+- Saving/Loading of created "models"
 
 ### Definitions, Acronyms, and Abbreviations
-W.I.P.
+DQN -> Deep Q Network
+Q-table -> storage of our data that determines the "quality" of specific state/action combos.
+NN -> Neural Network
+MSE -> Means Squared Error
+
 
 ## Overview
-Reinforcement learning is a sub-field in Machine Learning that aims to create a program that can learn the most optimal strategies to play simple games. It does this through Q-learning and a Q-table filled with different action/state combinations, with each combination containing a reward value. Over time, we update this value to get to a place where our table finalizes a table with the correct reward values. We can go further than this and combine a Neural Network with Q-learning to have the learning process both become more efficient and take much less time to complete [W.I.P.]
+Reinforcement learning is a sub-field in Machine Learning that aims to create a program that can learn the most optimal strategies to play simple games. We are utilizing a specific Reinforcement Learning method called Q-learning. It does this through a Q-table filled with different action/state combinations, with each combination containing a "quality" value. Over time, we update this value to get to a place where our table finalizes a table with the correct Q-values. We can go further than this and combine a Neural Network with Q-learning to complete larger and more dynamic problems where our environment is constantly changing. 
 
 ### System Features:
-[W.I.P.]
+1. **Agent Training**: Allows for the newly initialized agent to learn the optimal ways to play a game of TicTacToe, either through Q-learning or Deep Q-learning.
+2. **Game Playing**: Allows for a user to play a game with the AI Agent after training.
+3. **Saving and Loading**: Allows for the user to save an agent's specific Q-table values/NN weights after training, and for future use if user does not desire to traing the Agent for a long period of time
 
 ## Use Cases
 
-### Use Case 1.1: Base Tic Tac Toe with Base Q-learning
-- **Actors**: Human Player and Reinforcement Learning Program.
+### Use Case 1.1: Training the Agent through Q-learning
+- **Actors**: AI Agent and "Randomly-Selecting" Agent
+- **Overview**: The AI agent will pick actions, go through with them, and record/update results in it's Q-table. The random agent also randomly plays actions, which is also "recorded and updated".
+
+**Typical Course of Events**
+1. Greedy-Epsilon Selection of action to take.
+2. AI Agent takes the action.
+3. Records result of action (new state/action q-values, reward for taking action).
+4. Updates Q-table value of the state/action pair just taken.
+5. "Randomly-Selecting" Agent plays in an empty spot, and it's results are recorded and updated.
+6. Reduce our Greedy-Epsilon value by a very, very small amount.
+7. Go back to step 1, repeat an "episode-count" amount of times.
+
+**Alternative Courses**
+- **Steps 4/5**: AI Agent or "Randomly-Selecting" agent force the board into a terminal state
+  1. Record results (-1.0 reward for AI loss, 1.0 reward for AI win, 0.0 reward for Tie, and set our next state to our current state)
+  2. Update Q-values accordingly
+  3. Reset our Tic-Tac-Toe board to be empty
+
+### Use Case 1.2: Tic-Tac-Toe Game with Base Q-learning
+- **Actors**: Human Player and AI Agent.
 - **Overview**: The human player plays games of Tic Tac Toe against a program that utilizes a basic Q-learning algorithm.
 
 **Typical Course of Events**:
-1. A random "coin toss" determines who goes first, and that player puts down their first.
-2. If the program went first, user continues with it's turn normally. If the player went first, the program will go through a Q-learning table, and use a Neural Network to determine the best course of action to win. 
-3. The Process repeats until either one player looses or a tie is reached.
+1. Computer program will go first.
+2. The program will go through a Q-learning table, and pick the highest value to determine the best course of action to win.
+3. Player then takes their turn
+4. The Process repeats until either one looses or a tie is reached.
 
 **Alternative Courses**:
-- **Step 1/2**: User enters coordinates that do not correspong to an existing/open position.
+- **Steps 1/2**: User enters coordinates that do not correspong to an existing/open position.
   1. Displays error - Not a valid position [if taken - position is already filled, choose a different position] [if non-existent - position is outside of the Tic Tac Toe Board, choose a different position].
   2. Go back to step 2.
+ 
 
-### Use Case 1.2: Deep Q-learning Tic Tac Toe
-- **Actors**: Human Player and Reinforcement Learning Program.
-- **Overview**: The human player plays modified games of Tic Tac Toe (in this case, a 5 by 5 board instead of a 3 by 3 board) against a program that acts optimally.
+### Use Case 1.3: Training the Agent throught Deep Q-learning
+- **Actors**: AI Agent and "Randomly-Selecting" Agent
+- **Overview**: The AI agent will first create experience replays, sample a selection of them, and train the Policy Neural Network on them through back-propagating the result of a MSE loss of the specific experience you are utilizing. The random agent also randomly plays actions to ensure the board state is primed for the AI Agent's turn.
+
+**Typical Course of Events**
+1. Program generates an experience replay (Using a Epsilon-Greedy method), recording the starting state, the resulting state, the action taken to get there, and the reward for taking that action in that state.
+2. Randomly-Selecting Agent plays an avaliable action, updating the board so it's always the AI agent's turn
+3. Stores experiences in the Experience Replay Buffer
+4. Reduce our Greedy-Epsilon value by a very, very small amount.
+5. Training function samples these experiences, taking a set amount of them randomly.
+6. Converts starting state of select experience into doubles, before feeding them into our Policy NN to get action double results. Adjust results to mask invalid actions
+7. Set a variable to our selected action in the current experience
+8. Repeat Step 6 for our Target NN.
+9. Take the highest output for the Target NN, and using our MSE loss equation, retrieve an error. 
+10. We backpropagate this error on the current experience's action output Neuron in our Policy NN.
+11. Go back to step 1, repeat an "episode-count" amount of times. Every 100 iterations, update our Target NN to have the same weights as our Policy NN.
+
+**Alternative Courses**
+- **Steps 1/2**: AI Agent or "Randomly-Selecting" Agent brings the board to a terminal state
+  1. If AI Agent wins, set reward to 1.0, if we get a draw, set reward to -0.1, if AI Agent loses, set reward to -1.0
+  2. Record our Experience accordingly
+  3. Reset our Tic-Tac-Toe board to be empty
+     
+- **Step 5**: Experience Replay Buffer is smaller than our set batch size for experiences to sample
+  1. Select an amount of random replays based on the current buffers size, and proceed as usual.
+     
+- **Step 5**L Experience Replay Buffer is full
+  1. Delete the first experience, and proceed as usual
+     
+- **Step 9**: our current board state is now terminal
+  1. Instead of using an MSE loss equation, just set the error to be our reward value, and proceed as usual
+
+### Use Case 1.4: Tic-Tac-Toe Game with Deep Q-learning
+- **Actors**: Human Player and AI Agent.
+- **Overview**: The human player plays games of Tic Tac Toe against a program that utilizes a Deep Q-learning algorithm.
 
 **Typical Course of Events**:
-1. If the program went first, user continues with it's turn normally. If the player went first, the program will go through a Q-learning table
-2. The program will take a table of all the states and all the actions, and insert in random rewards for each cell.
-3. The program will then play games, and learn how to adjust the values in the table.
-4. The Process repeats until it is determined that the reward values are adjusted enough.
-5. The program will now be able to play the game with a player, where the player enters in coords for the tic tac toe board.
+1. Computer program will go first.
+2. The program will translate the Tic-Tac-Toe board into doubles, feed it into a Neural Network, and pick the highest value output Neuron to determine the best course of action to win.
+3. Player then takes their turn
+4. The Process repeats until either one looses or a tie is reached.
 
 **Alternative Courses**:
-- **Step 1/2**: User enters coordinates that do not correspong to an existing/open position.
+- **Steps 1/2**: User enters coordinates that do not correspong to an existing/open position.
   1. Displays error - Not a valid position [if taken - position is already filled, choose a different position] [if non-existent - position is outside of the Tic Tac Toe Board, choose a different position].
   2. Go back to step 2.
